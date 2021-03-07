@@ -1,12 +1,12 @@
 const Koa = require('koa')
 const koaBody = require('koa-body')
+const cors = require('@koa/cors')
 const { connect } = require('./db')
 const registerRoutes = require('./routers/index')
-const cors = require('@koa/cors')
 
 const app = new Koa()
 
-// 连接数据库并进行下一步操作
+// 连接数据库成功后并进行下一步操作
 connect().then(() => {
   
   // 使用koa/cors解决同源问题  增加http请求头的方式解决跨域问题

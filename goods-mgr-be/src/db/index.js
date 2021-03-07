@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 
-// 运行User文件
+// 运行规则集合文件
 require('./Schemas/User')
+require('./Schemas/Invite')
 
 // 给哪个数据库
 // 哪个集合
