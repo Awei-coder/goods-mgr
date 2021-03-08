@@ -3,8 +3,6 @@ const mongoose = require('mongoose')
 // 引入uuid创建唯一邀请码
 const { v4: uuidv4 } = require('uuid')
 
-const { getBody } = require('../../helpers/utils')
-
 // 获取invite表
 const InviteCode = mongoose.model('InviteCode')
 
@@ -13,6 +11,7 @@ const router = new Router({
   prefix: '/invite'
 })
 
+// 接收到添加请求时
 router.get('/add', async (ctx) => {
 
   // 创建邀请码
