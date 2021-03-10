@@ -1,5 +1,6 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
+// 封装路由获取body, 减少重复代码
 const { getBody } = require('../../helpers/utils')
 const jwt = require('jsonwebtoken')
 
@@ -50,7 +51,7 @@ router.post('/register', async (ctx) => {
 
   // 判断用户是否存在
   if (findUser) {
-    // ctx.body = ctx.res.body = ctx.response.body
+    // ctx.body = ctx.response.body
     // 如果用户已经存在,返回注册失败信息,return
     ctx.body = {
       code: 0,

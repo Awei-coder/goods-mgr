@@ -2,7 +2,7 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const cors = require('@koa/cors')
 const { connect } = require('./db')
-const registerRoutes = require('./routers/index')
+const Routes = require('./routers/index')
 
 const app = new Koa()
 
@@ -15,7 +15,7 @@ connect().then(() => {
   app.use(koaBody())
   
   // 注册登陆注册路由
-  registerRoutes(app)
+  Routes(app)
 
   // 开启一个 http 服务
   // 接受 http 请求 并作处理, 处理完响应
