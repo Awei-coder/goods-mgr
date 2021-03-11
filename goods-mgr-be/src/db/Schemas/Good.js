@@ -12,6 +12,9 @@ const GoodSchema = new mongoose.Schema({
   manufactureDate: String,
   // 分类
   classify: String,
+  // 库存
+  count: Number,
+  
   // 基本信息
   meta: getMeta(),
 })

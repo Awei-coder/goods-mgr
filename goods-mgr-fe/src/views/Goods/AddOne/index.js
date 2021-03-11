@@ -9,6 +9,7 @@ const defaultFormData = {
   manufacturer: '',
   manufactureDate: 0,
   classify: '',
+  count: 0,
 }
 
 export default defineComponent({
@@ -23,6 +24,7 @@ export default defineComponent({
       const form = clone(addForm)
       // 把moment对象转换成时间戳
       form.manufactureDate = addForm.manufactureDate.valueOf()
+      // 发送添加请求
       const res = await good.add(form)
 
       result(res).success((d, {data}) => {

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <a-modal :visible="props.show" title="添加书籍" @ok="submit" @cancel="close">
+    <a-modal
+      :visible="props.show"
+      title="添加书籍"
+      @ok="submit"
+      @cancel="close"
+    >
       <!-- // 商品名
         name: String,
         // 价格
@@ -37,6 +42,9 @@
           <a-input v-model:value="addForm.classify" />
         </a-form-item>
 
+        <a-form-item label="库存">
+          <a-input v-model:value="addForm.count" />
+        </a-form-item>
       </a-form>
     </a-modal>
   </div>
