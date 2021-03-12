@@ -30,3 +30,10 @@ export const updateCount = (data = {}) => {
     'http://localhost:3000/good/update/count', data
   )
 }
+
+// 修改商品信息
+export const update = (data = {}) => {
+  return axios.post(
+    'http://localhost:3000/good/update', data
+  )
+}

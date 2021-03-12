@@ -1,12 +1,14 @@
 import { defineComponent, ref, onMounted } from 'vue'
-import addOne from './AddOne/index.vue'
+import AddOne from './AddOne/index.vue'
+import Update from './Update/index.vue'
 import { good } from '@/service'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import { message, Modal, Input } from 'ant-design-vue'
 
 export default defineComponent({
   components: {
-    addOne
+    AddOne,
+    Update,
   },
   setup() {
     const columns = [
@@ -47,8 +49,12 @@ export default defineComponent({
       },
     ]
 
-    // 显示隐藏表单变量
+    // 显示隐藏添加商品表单变量
     const show = ref(false)
+    // 显示隐藏修改商品表单变量
+    const showUpdateModal = ref(false)
+    // 正在修改的商品
+    const curEditGood = ref({})
 
     const list = ref([])
 
@@ -132,6 +138,19 @@ export default defineComponent({
           list.value.splice(idx, 1)
         })
     }
+
+    // 编辑功能
+    const update = async ({ record }) => {
+      showUpdateModal.value = true;
+      // 这里直接把对象赋值过去, 如果curEditGood的值修改 那么这条数据的内容也自动会被修改
+      curEditGood.value = record
+    }
+
+    // 接收编辑子组件传过来的更新数据操作 newData为子组件传过来的data
+    const updateGood = (newData) => {
+      Object.assign(curEditGood.value, newData)
+    }
+
     // type 给服务端判断进出库的常量
     const updateCount = (type, record) => {
       let word = '增加'
@@ -147,14 +166,14 @@ export default defineComponent({
             <Input class="__good_input_count" />
           </div>
         ),
-        
+
         // 确定按钮
         onOk: async () => {
           const el = document.querySelector('.__good_input_count')
           let num = el.value
-          
+
           // 如果输入的不为数字
-          if((typeof num) !== 'number') {
+          if ((typeof num) !== 'number') {
             message.error('请输入准确数字！')
             return
           }
@@ -164,24 +183,24 @@ export default defineComponent({
             num,
             type,
           })
-          
+
           result(res)
             .success((data) => {
 
-              if(type === 'IN_COUNT') {
+              if (type === 'IN_COUNT') {
                 // 入库操作
                 num = Math.abs(num)
-              }else {
+              } else {
                 // 出库操作
                 num = -Math.abs(num)
               }
-              
+
               // 查找当前进出库的商品
               const one = list.value.find((item) => {
                 return item._id === record._id
               })
               // 修改前端进出库显示
-              if(one) {
+              if (one) {
                 one.count += num
               }
 
@@ -205,6 +224,10 @@ export default defineComponent({
       isSearch,
       remove,
       updateCount,
+      showUpdateModal,
+      update,
+      curEditGood,
+      updateGood,
     }
   }
 })

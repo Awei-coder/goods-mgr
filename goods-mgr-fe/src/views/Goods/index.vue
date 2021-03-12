@@ -33,6 +33,8 @@
 
         <!-- 删除按钮 -->
         <template #actions="data">
+          <a href="javascript:;" @click="update(data)">编辑</a>
+          &nbsp;
           <a href="javascript:;" @click="remove(data)">删除</a>
         </template>
 
@@ -52,8 +54,15 @@
           @change="setPage"
         />
       </space-between>
-      <!-- 双向绑定show, 子传父通过子传过来的值修改父的值 -->
+      <!-- 添加一条商品功能 双向绑定show, 子传父通过子传过来的值修改父的值 -->
       <add-one v-model:show="show" />
+      <!-- 修改商品功能 -->
+      <!-- curEditGood把数据传给子组件 -->
+      <update 
+      v-model:show="showUpdateModal"
+      :good="curEditGood"
+      @update="updateGood"
+      />
     </a-card>
   </div>
 </template>

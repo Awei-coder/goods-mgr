@@ -170,4 +170,53 @@ router.post('/update/count', async (ctx) => {
 
 })
 
+router.post('/update', async (ctx) => {
+  // 获取前端传过来需要修改的数据
+  const {
+    id,
+    // name,
+    // price,
+    // manufacturer,
+    // manufactureDate,
+    // classify,
+    ...other
+  } = getBody(ctx)
+
+  const one = await Good.findOne({
+    _id: id
+  }).exec()
+
+  if(!one) {
+    ctx.body = {
+      code: 0,
+      msg: '没有找到相关书籍',
+      data: res,
+    }
+  }
+
+  // 处理传过来的数据
+  const newQuery = {}
+
+  //Object.entries() 例如:{name: 'zhangsan',age: 18} 转换为=> [['name','zhangsan'], ['age','18']]
+  // [key, value] = ['name','zhangsan'] 解构出数据
+  Object.entries(other).forEach(([key, value]) => {
+    if(value) {
+      newQuery[key] = value
+    }
+  })
+
+  // 修改查找到的数据
+  Object.assign(one, newQuery)
+  
+  // 保存数据插入表
+  const res = await one.save()
+
+  ctx.body = {
+    code: 1,
+    msg: '信息修改成功',
+    data: res,
+  }
+
+})
+
 module.exports = router
