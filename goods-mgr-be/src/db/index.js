@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 require('./Schemas/User')
 require('./Schemas/Invite')
 require('./Schemas/Good')
+require('./Schemas/InventoryLog')
 
 // 给哪个数据库
 // 哪个集合

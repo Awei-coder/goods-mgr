@@ -10,6 +10,8 @@ const GOOD_COUST = {
 
 // 获取商品表
 const Good = mongoose.model('Good')
+// 获取出入库日志表
+const InventoryLog = mongoose.model('InventoryLog')
 
 // 创建路由
 const router = new Router({
@@ -40,6 +42,10 @@ router.get('/list', async (ctx) => {
   const list = await Good
   // find可以接收一个对象 按照对象里面给的属性当做条件去查找数据
   .find(query)
+  .sort({
+    // 倒序
+    _id: -1,
+  })
   // 跳过几页 共几条数据
   .skip((page - 1) * size)
   // 查询几条数据
@@ -162,6 +168,14 @@ router.post('/update/count', async (ctx) => {
 
   const res = await good.save()
 
+  // 更新出入库记录
+  const log = new InventoryLog({
+    type,
+    num: Math.abs(num)
+  })
+  
+  log.save()
+
   ctx.body = {
     code: 1,
     msg: '进出库操作成功',
@@ -170,6 +184,7 @@ router.post('/update/count', async (ctx) => {
 
 })
 
+// 更新接口
 router.post('/update', async (ctx) => {
   // 获取前端传过来需要修改的数据
   const {
@@ -189,7 +204,7 @@ router.post('/update', async (ctx) => {
   if(!one) {
     ctx.body = {
       code: 0,
-      msg: '没有找到相关书籍',
+      msg: '没有找到相关商品',
       data: res,
     }
   }
@@ -217,6 +232,32 @@ router.post('/update', async (ctx) => {
     data: res,
   }
 
+})
+
+// 商品详情接口
+router.get('/detail/:id', async (ctx) => {
+  const {
+    id
+  } = ctx.params
+
+  const one = await Good.findOne({
+    _id: id
+  })
+
+  if(!one) {
+    ctx.body = {
+      code: 0,
+      msg: '没有找到相关商品',
+    }
+    return
+  }
+
+  ctx.body = {
+    code: 1,
+    msg: '查询成功',
+    data: one
+  }
+  
 })
 
 module.exports = router

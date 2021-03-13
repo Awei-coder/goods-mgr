@@ -37,3 +37,10 @@ export const update = (data = {}) => {
     'http://localhost:3000/good/update', data
   )
 }
+
+// 查询商品详情页
+export const detail = (id) => {
+  return axios.get(
+    `http://localhost:3000/good/detail/${id}`
+  )
+}

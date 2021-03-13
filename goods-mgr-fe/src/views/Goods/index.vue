@@ -25,7 +25,7 @@
 
       <a-divider />
 
-      <a-table :columns="columns" :data-source="list" :pagination="false">
+      <a-table :columns="columns" :data-source="list" :pagination="false" bordered>
         <template #manufactureDate="data">
           <!-- 格式化出厂日期 -->
           {{ formatTimeStamp(data.record.manufactureDate) }}
@@ -33,6 +33,8 @@
 
         <!-- 删除按钮 -->
         <template #actions="data">
+          <a href="javascript:;" @click="toDetail(data)">详情</a>
+          &nbsp;
           <a href="javascript:;" @click="update(data)">编辑</a>
           &nbsp;
           <a href="javascript:;" @click="remove(data)">删除</a>

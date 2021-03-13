@@ -2,3 +2,5 @@
 export * as auth from './auth'
 
 export * as good from './good'
+
+export * as inventoryLog from './inventory-log'

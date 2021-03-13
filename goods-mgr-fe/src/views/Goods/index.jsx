@@ -1,6 +1,7 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import AddOne from './AddOne/index.vue'
 import Update from './Update/index.vue'
+import { useRouter } from 'vue-router'
 import { good } from '@/service'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import { message, Modal, Input } from 'ant-design-vue'
@@ -11,6 +12,9 @@ export default defineComponent({
     Update,
   },
   setup() {
+    // 比如前进页 后退页 跳到某一页
+    const router = useRouter()
+
     const columns = [
       {
         title: '商品名',
@@ -139,13 +143,14 @@ export default defineComponent({
         })
     }
 
-    // 编辑功能
+    // 显示更新弹框
     const update = async ({ record }) => {
       showUpdateModal.value = true;
       // 这里直接把对象赋值过去, 如果curEditGood的值修改 那么这条数据的内容也自动会被修改
       curEditGood.value = record
     }
 
+    // 更新列表的某一行数据
     // 接收编辑子组件传过来的更新数据操作 newData为子组件传过来的data
     const updateGood = (newData) => {
       Object.assign(curEditGood.value, newData)
@@ -173,7 +178,7 @@ export default defineComponent({
           let num = el.value
 
           // 如果输入的不为数字
-          if ((typeof num) !== 'number') {
+          if (!Number(num)) {
             message.error('请输入准确数字！')
             return
           }
@@ -210,6 +215,11 @@ export default defineComponent({
       })
     }
 
+    // 进入书籍详情页
+    const toDetail = ({record}) => {
+      router.push(`/goods/${record._id}`)
+    }
+
     return {
       columns,
       show,
@@ -228,6 +238,7 @@ export default defineComponent({
       update,
       curEditGood,
       updateGood,
+      toDetail,
     }
   }
 })

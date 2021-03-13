@@ -40,17 +40,22 @@ export const clone = (obj) => {
   // 实现深拷贝
   return JSON.parse(JSON.stringify(obj))
 }
+// 处理时间, 9:9:12 -> 09:09:12
+const tsPadStart = (str) => {
+  str = String(str)
+
+  return str.padStart(2,'0')
+}
 
 // 格式化出厂时间
 export const formatTimeStamp = (ts) => {
   const date = new Date(Number(ts))
   const YYYY = date.getFullYear()
-  const MM = date.getMonth() + 1
-  const DD = date.getDate()
-
-  const hh = date.getHours()
-  const mm = date.getMinutes()
-  const ss = date.getSeconds()
+  const MM = tsPadStart(date.getMonth() + 1)
+  const DD = tsPadStart(date.getDate())
+  const hh = tsPadStart(date.getHours())
+  const mm = tsPadStart(date.getMinutes())
+  const ss = tsPadStart(date.getSeconds())
 
   return `${YYYY}/${MM}/${DD} ${hh}:${mm}:${ss}`
 }
