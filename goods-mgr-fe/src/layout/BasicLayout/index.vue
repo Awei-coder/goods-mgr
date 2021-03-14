@@ -18,6 +18,7 @@
         <app-nav />
       </div>
       <div class="right">
+        <!-- 渲染路由传过来的组件 -->
         <router-view></router-view>
       </div>
     </div>
