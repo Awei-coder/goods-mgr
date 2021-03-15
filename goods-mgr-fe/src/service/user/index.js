@@ -1,12 +1,13 @@
 import axios from 'axios'
 
-export const list = (page, size) => {
+export const list = (page, size, keyword) => {
   return axios.get(
     'http://localhost:3000/user/list',
     {
       params: {
         page,
         size,
+        keyword,
       }
     }
   )

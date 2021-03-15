@@ -36,10 +36,12 @@ export default defineComponent({
     const total = ref(0)
     const curPage = ref(1)
     const showAddModal = ref(false)
+    const keyword = ref('')
+    const isSearch = ref(false)
 
     // 获取用户列表
     const getUsers = async () => {
-      const res = await user.list(curPage.value, 10)
+      const res = await user.list(curPage.value, 10, keyword.value)
 
       result(res)
         .success(({ data: { list: resList, total: resTotol } }) => {
@@ -81,6 +83,21 @@ export default defineComponent({
         })
     }
 
+    // 点击搜索功能
+    const onSearch = () => {
+      console.log(keyword.value);
+      // 如果搜索栏为空, !!keyword.value = !!'' = Boolean('') = false
+      isSearch.value = !!keyword.value
+      getUsers()
+    }
+
+    // 清空搜索功能
+    const clearSearch = () => {
+      keyword.value = ''
+      isSearch.value = false
+      getUsers()
+    }
+
     return {
       curPage,
       list,
@@ -93,6 +110,10 @@ export default defineComponent({
       setPage,
       total,
       resetPassword,
+      keyword,
+      isSearch,
+      onSearch,
+      clearSearch,
     }
   }
 })

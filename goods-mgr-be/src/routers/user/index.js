@@ -13,12 +13,20 @@ router.get('/list', async (ctx) => {
   let {
     page,
     size,
+    keyword,
   } = ctx.query
+
+  // 如果处于搜索用户状态
+  const query = {}
+  if(keyword) {
+    query.account = keyword
+  }
 
   page = Number(page)
   size = Number(size)
   
-  const list = await User.find()
+  const list = await User
+  .find(query)
   .sort({
     _id: -1,
   })

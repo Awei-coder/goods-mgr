@@ -4,8 +4,22 @@
       <h2>用户管理</h2>
 
       <a-divider></a-divider>
+      <space-between>
+        <div class="search">
+          <a-input-search
+            placeholder="根据用户名搜索"
+            enter-button
+            v-model:value="keyword"
+            @search="onSearch"
+            style="width: 200px"
+          />
+          <a v-if="isSearch" href="javascript:;" @click="clearSearch"
+            >清空搜索结果</a
+          >
+        </div>
 
-      <a-button @click="showAddModal = true">添加用户</a-button>
+        <a-button @click="showAddModal = true">添加用户</a-button>
+      </space-between>
 
       <a-divider></a-divider>
 
