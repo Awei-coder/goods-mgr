@@ -25,5 +25,6 @@ console.log(token);
 // 3. 解密成功或者失败的回调函数,成功返回解密后的数据体,失败返回错误信息
 jwt.verify(token, 'aaa', (err, payload) => {
   console.log(err);
+  // 解析后的结果
   console.log(payload);
 })

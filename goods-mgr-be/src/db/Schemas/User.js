@@ -5,6 +5,8 @@ const { getMeta, preSave } = require('../helps')
 const UserSchema = new mongoose.Schema({
   account: String,
   password: String,
+  // 这边拿到的是角色那边的_id, 而id在用户那边是相对应这权限, 可以检测对应的权限
+  character: String,
 
   meta: getMeta(),
 })

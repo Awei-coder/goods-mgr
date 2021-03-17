@@ -4,6 +4,10 @@ import { auth } from '@/service'
 import { message } from 'ant-design-vue';
 import { result } from '@/helpers/utils'
 import msConfig from '@/helpers/utils/messageConfig'
+import store from '@/store'
+import { getCharacterInfoById } from '@/helpers/character'
+import {useRouter} from 'vue-router'
+import {setToken} from '@/helpers/token'
 
 export default defineComponent({
   components: {
@@ -13,6 +17,8 @@ export default defineComponent({
     MessageOutlined
   },
   setup() {
+
+    const router = useRouter()
 
     // reactive对比ref, 它可以定义多个响应式数据
     // 注册表单
@@ -72,8 +78,21 @@ export default defineComponent({
       const res = await auth.login(loginForm.account, loginForm.password)
       // 处理axios返回逻辑
       result(res)
-        .success((data, response) => {
-          message.success(data.msg)
+        .success(({ msg, data: { user, token } }, response) => {
+          message.success(msg)
+
+          // 设置登陆用户的状态
+          store.commit('setUserInfo', user)
+
+          // 设置用户角色
+          store.commit('setUserCharacter', getCharacterInfoById(user.character))
+
+          // 设置token
+          setToken(token)
+
+          // 进入页面
+          router.replace('/goods')
+          
         })
       // 这里类似传过去一个函数 然后在那边(data,response){message.success(data.msg)} (data, response) 传回来调用了
 

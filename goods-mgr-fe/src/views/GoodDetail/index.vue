@@ -4,11 +4,11 @@
       <space-between>
         <h2>{{ d.name }}</h2>
         <div>
-          <a-button size="small" type="primary" @click="showUpdateModal = true"
+          <a-button v-only-admin size="small" type="primary" @click="showUpdateModal = true"
             >编辑</a-button
           >
           &nbsp;
-          <a-button size="small" type="danger" @click="remove">删除</a-button>
+          <a-button v-only-admin size="small" type="danger" @click="remove">删除</a-button>
         </div>
       </space-between>
 

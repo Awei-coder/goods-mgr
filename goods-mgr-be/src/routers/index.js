@@ -3,6 +3,7 @@ const invite = require('./invite-code')
 const good = require('./good')
 const inventoryLog = require('./inventory-log')
 const user = require('./user')
+const character = require('./character')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -15,4 +16,6 @@ module.exports = (app) => {
   app.use(inventoryLog.routes())
   // 注册用户路由
   app.use(user.routes())
+  // 注册用户权限路由
+  app.use(character.routes())
 }

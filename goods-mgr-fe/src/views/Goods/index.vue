@@ -20,7 +20,7 @@
           >
         </div>
 
-        <a-button @click="show = true">添加一条</a-button>
+        <a-button v-only-admin @click="show = true">添加一条</a-button>
       </space-between>
 
       <a-divider />
@@ -35,14 +35,14 @@
         <template #actions="data">
           <a href="javascript:;" @click="toDetail(data)">详情</a>
           &nbsp;
-          <a href="javascript:;" @click="update(data)">编辑</a>
+          <a v-only-admin href="javascript:;" @click="update(data)">编辑</a>
           &nbsp;
-          <a href="javascript:;" @click="remove(data)">删除</a>
+          <a v-only-admin href="javascript:;" @click="remove(data)">删除</a>
         </template>
 
         <!-- 库存信息 -->
         <template #count="data">
-          <a href="javascript:;" @click="updateCount('IN_COUNT', data.record)">入库</a>
+          <a v-only-admin href="javascript:;" @click="updateCount('IN_COUNT', data.record)">入库</a>
           {{ data.record.count }}
           <a href="javascript:;" @click="updateCount('OUT_COUNT', data.record)">出库</a>
         </template>

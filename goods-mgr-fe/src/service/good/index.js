@@ -1,4 +1,8 @@
 import axios from 'axios'
+import { getToken } from '../../helpers/token'
+
+// 设置默认请求头, 把token带过去  不限于这个文件, 全局配置, 发送请求都会把token带过去服务端
+axios.defaults.headers['Authorization'] = `Bearer ${getToken()}`
 
 // 添加商品请求
 export const add = (form) => {

@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { character } from '@/service'
+import store from '@/store'
 
 const routes = [
   {
@@ -38,5 +40,18 @@ const router = createRouter({
   // 注册路由
   routes,
 });
+
+// 导航守卫
+router.beforeEach(async (to, from, next) => {
+  // 如果stote下的character不为空 获取角色信息大全
+  if(!store.state.characterInfo.length) {
+    store.dispatch('getCharacterInfo')
+  }
+
+  // 进入先发送info请求
+  store.dispatch('getUserInfo')
+
+  next()
+})
 
 export default router;

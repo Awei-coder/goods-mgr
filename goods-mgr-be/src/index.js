@@ -3,18 +3,25 @@ const koaBody = require('koa-body')
 const cors = require('@koa/cors')
 const { connect } = require('./db')
 const Routes = require('./routers/index')
+const { middleware: koaJwtMiddleware ,catchTokenError} = require('./helpers/token')
 
 const app = new Koa()
 
 // 连接数据库成功后并进行下一步操作
 connect().then(() => {
-  
+
   // 使用koa/cors解决同源问题  增加http请求头的方式解决跨域问题
   app.use(cors())
   // 使用koa-body中间件
   app.use(koaBody())
-  
-  // 注册登陆注册路由
+
+  // 捕捉token错误  必须在koa-jwt中间件前, 这样才能捕获到它的错误
+  app.use(catchTokenError)
+
+  // 注册koa-jwt中间件
+  koaJwtMiddleware(app)
+
+  // 注册路由
   Routes(app)
 
   // 开启一个 http 服务

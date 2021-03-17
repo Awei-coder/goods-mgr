@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 // 封装路由获取body, 减少重复代码
 const { getBody } = require('../../helpers/utils')
 const jwt = require('jsonwebtoken')
+const config = require('../../project.config')
 
 // 获取user表
 const User = mongoose.model('User')
@@ -126,12 +127,13 @@ router.post('/login', async (ctx) => {
     // 信息脱敏用于返回前端
     const user = {
       account: one.account,
-      _id: one._id
+      _id: one._id,
+      character: one.character,
     }
 
     // 生成token
-    const token = jwt.sign(user, 'goods-mgr')
-
+    const token = jwt.sign(user, config.JWT_SECRET)
+ 
     // 返回信息和token到前端
     ctx.body = {
       code: 1,
