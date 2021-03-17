@@ -38,6 +38,7 @@ const middleware = (app) => {
   )
 }
 
+// 捕捉错误中间件
 const catchTokenError = async (ctx, next) => {
   // next捕捉到下一个中间件的错误
   return next().catch((error) => {

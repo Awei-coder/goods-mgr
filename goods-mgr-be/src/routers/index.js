@@ -4,6 +4,7 @@ const good = require('./good')
 const inventoryLog = require('./inventory-log')
 const user = require('./user')
 const character = require('./character')
+const log = require('./log')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -18,4 +19,6 @@ module.exports = (app) => {
   app.use(user.routes())
   // 注册用户权限路由
   app.use(character.routes())
+  //注册操作日志路由
+  app.use(log.routes())
 }

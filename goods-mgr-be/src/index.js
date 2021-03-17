@@ -4,6 +4,7 @@ const cors = require('@koa/cors')
 const { connect } = require('./db')
 const Routes = require('./routers/index')
 const { middleware: koaJwtMiddleware ,catchTokenError} = require('./helpers/token')
+const { logMiddleware } = require('./helpers/log')
 
 const app = new Koa()
 
@@ -20,6 +21,9 @@ connect().then(() => {
 
   // 注册koa-jwt中间件
   koaJwtMiddleware(app)
+
+  // 注册log中间件获取数据
+  app.use(logMiddleware)
 
   // 注册路由
   Routes(app)

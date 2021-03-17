@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import { character } from '@/service'
 import store from '@/store'
 
 const routes = [
@@ -31,6 +30,11 @@ const routes = [
         name: 'User',
         component: () => import(/* webpackChunkName: "Users" */ '../views/Users/index.vue')
       },
+      {
+        path: 'log',
+        name: 'Log',
+        component: () => import(/* webpackChunkName: "Log" */ '../views/Log/index.vue')
+      },
     ]
   },
 ];
@@ -43,13 +47,22 @@ const router = createRouter({
 
 // 导航守卫
 router.beforeEach(async (to, from, next) => {
+
+  // 设置处理请求用户数据的数组
+  const reqArr = []
+
   // 如果stote下的character不为空 获取角色信息大全
   if(!store.state.characterInfo.length) {
-    store.dispatch('getCharacterInfo')
+    reqArr.push(store.dispatch('getCharacterInfo'))
   }
 
   // 进入先发送info请求
-  store.dispatch('getUserInfo')
+  if(!store.state.userInfo.length) {
+    reqArr.push(store.dispatch('getUserInfo'))
+  }
+
+  // 统一处理promise请求, all请求全部完成后
+  await Promise.all(reqArr)
 
   next()
 })
