@@ -49,20 +49,20 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
 
   // 设置处理请求用户数据的数组
-  const reqArr = []
+  // const reqArr = []
 
   // 如果stote下的character不为空 获取角色信息大全
   if(!store.state.characterInfo.length) {
-    reqArr.push(store.dispatch('getCharacterInfo'))
+    await store.dispatch('getCharacterInfo')
   }
 
   // 进入先发送info请求
   if(!store.state.userInfo.length) {
-    reqArr.push(store.dispatch('getUserInfo'))
+    await store.dispatch('getUserInfo')
   }
 
   // 统一处理promise请求, all请求全部完成后
-  await Promise.all(reqArr)
+  // await Promise.all(reqArr)
 
   next()
 })

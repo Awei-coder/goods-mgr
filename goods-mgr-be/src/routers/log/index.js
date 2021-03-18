@@ -1,5 +1,6 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
+const { getBody } = require('../../helpers/utils')
 
 
 // 获取log表
@@ -21,7 +22,12 @@ router.get('/list', async (ctx) => {
   size = Number(size)
 
   const list = await log
-    .find()
+    .find({
+      show: true
+    })
+    .sort({
+      endTime: -1
+    })
     .skip((page - 1) * size)
     .limit(size)
     .exec()
@@ -37,6 +43,37 @@ router.get('/list', async (ctx) => {
       size,
       total,
     }
+  }
+
+})
+
+router.post('/delete', async (ctx) => {
+  const {
+    id
+  } = getBody(ctx)
+
+  const one = await log.findOne({
+    _id: id
+  }).exec()
+
+  // 安全判断
+  if(!one) {
+    ctx.body = {
+      code: 0,
+      msg: '删除成功',
+      data: {}
+    }
+    return
+  }
+
+  // 软删除, 只是不显示在前端, 但是还是存在于数据库
+  one.show = false
+
+  await one.save()
+
+  ctx.body = {
+    code: 1,
+    msg: '删除成功'
   }
 
 })

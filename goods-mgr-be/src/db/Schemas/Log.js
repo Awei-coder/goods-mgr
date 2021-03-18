@@ -11,10 +11,11 @@ const LogSchema = new mongoose.Schema({
   request: {
     method: String,
     url: String,
-    // 记录文本之类, 文件什么不记录
-    responseBody: String,
     status: Number,
   },
+
+  // 显示标志符
+  show: Boolean,
 
   startTime: Number,
   endTime: Number,

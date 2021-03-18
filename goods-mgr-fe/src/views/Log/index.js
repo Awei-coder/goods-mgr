@@ -1,7 +1,8 @@
-import { defineComponent , onMounted, ref} from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { log } from '@/service'
-import { result } from '@/helpers/utils'
+import { result, formatTimeStamp } from '@/helpers/utils'
 import { getLogInfoByPath } from '@/helpers/log'
+import {message} from 'ant-design-vue'
 
 const columns = [
   {
@@ -9,9 +10,21 @@ const columns = [
     dataIndex: 'user.account'
   },
   {
-    title:'动作',
-    dataIndex:'action'
-  }
+    title: '动作',
+    dataIndex: 'action'
+  },
+  {
+    title: '记录时间',
+    slots: {
+      customRender: 'createdAt',
+    },
+  },
+  {
+    title: '操作',
+    slots: {
+      customRender: 'action',
+    },
+  },
 ]
 
 export default defineComponent({
@@ -27,7 +40,7 @@ export default defineComponent({
       loading.value = false
 
       result(res)
-        .success(({data: {list: l, total: t}}) => {
+        .success(({ data: { list: l, total: t } }) => {
           l.forEach((item) => {
             item.action = getLogInfoByPath(item.request.url)
           })
@@ -47,6 +60,17 @@ export default defineComponent({
       getList()
     }
 
+    // 删除日志操作
+    const remove = async ({_id}) => {
+      const res = await log.remove(_id)
+
+      result(res)
+        .success(({msg}) => {
+          message.success(msg)
+          getList()
+        })
+    }
+
     return {
       curPage,
       total,
@@ -54,6 +78,8 @@ export default defineComponent({
       columns,
       setPage,
       loading,
+      formatTimeStamp,
+      remove,
     }
   }
 })
