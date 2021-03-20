@@ -5,6 +5,7 @@ const inventoryLog = require('./inventory-log')
 const user = require('./user')
 const character = require('./character')
 const log = require('./log')
+const forgetPassword = require('./forget-password')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -21,4 +22,6 @@ module.exports = (app) => {
   app.use(character.routes())
   //注册操作日志路由
   app.use(log.routes())
+  // 注册忘记密码路由
+  app.use(forgetPassword.routes())
 }

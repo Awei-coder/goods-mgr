@@ -8,6 +8,7 @@ require('./Schemas/InventoryLog')
 require('./Schemas/Character')
 require('./Schemas/Log')
 require('./Schemas/LogResponse')
+require('./Schemas/ForgetPassword')
 
 // 给哪个数据库
 // 哪个集合

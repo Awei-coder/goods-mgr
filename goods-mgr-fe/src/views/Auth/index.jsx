@@ -1,13 +1,13 @@
 import { defineComponent, reactive } from 'vue'
 import { UserOutlined, LockOutlined, MessageOutlined } from '@ant-design/icons-vue'
-import { auth } from '@/service'
-import { message } from 'ant-design-vue';
+import { auth, resetPassword } from '@/service'
+import { message, Modal, Input } from 'ant-design-vue';
 import { result } from '@/helpers/utils'
 import msConfig from '@/helpers/utils/messageConfig'
 import store from '@/store'
 import { getCharacterInfoById } from '@/helpers/character'
-import {useRouter} from 'vue-router'
-import {setToken} from '@/helpers/token'
+import { useRouter } from 'vue-router'
+import { setToken } from '@/helpers/token'
 
 export default defineComponent({
   components: {
@@ -27,6 +27,31 @@ export default defineComponent({
       password: '',
       inviteCode: ''
     })
+
+    // 忘记密码功能
+    const forgetPassword = () => {
+      Modal.confirm({
+        title: `请输入账号，提交给管理员审核`,
+        content: (
+          <div>
+            <Input class="__forget_password_account" />
+          </div>
+        ),
+
+        // 确定按钮
+        onOk: async () => {
+          const el = document.querySelector('.__forget_password_account')
+          let account = el.value
+
+          const res = await resetPassword.add(account)
+
+          result(res)
+            .success(({msg}) => {
+              message.success(msg)
+            })
+        }
+      })
+    }
 
     // 登录表单
     const loginForm = reactive({
@@ -92,7 +117,7 @@ export default defineComponent({
 
           // 进入页面
           router.replace('/goods')
-          
+
         })
       // 这里类似传过去一个函数 然后在那边(data,response){message.success(data.msg)} (data, response) 传回来调用了
 
@@ -107,6 +132,8 @@ export default defineComponent({
       loginForm,
       login,
 
+      // 忘记密码
+      forgetPassword,
     }
   },
 });

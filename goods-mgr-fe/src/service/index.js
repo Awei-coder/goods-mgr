@@ -1,3 +1,4 @@
+
 // 全部导出作为auth对象
 export * as auth from './auth'
 
@@ -10,3 +11,7 @@ export * as user from './user'
 export * as character from './character'
 
 export * as log from './log'
+
+export * as resetPassword from './reset-password'
+
+export * as inviteCode from './invite-code'
