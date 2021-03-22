@@ -6,6 +6,8 @@ const user = require('./user')
 const character = require('./character')
 const log = require('./log')
 const forgetPassword = require('./forget-password')
+const goodClassify = require('./good-classify')
+const profile = require('./profile')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -24,4 +26,8 @@ module.exports = (app) => {
   app.use(log.routes())
   // 注册忘记密码路由
   app.use(forgetPassword.routes())
+  // 注册分类路由
+  app.use(goodClassify.routes())
+  // 个人设置路由
+  app.use(profile.routes())
 }

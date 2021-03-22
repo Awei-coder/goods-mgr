@@ -19,8 +19,8 @@ export default [
     onlyAdmin: false,
     children: [
       {
-        title: '重置密码列表',
-        url: '/reset/password',
+        title: '分类管理',
+        url: '/good-classify',
         onlyAdmin: true
       },
       {
@@ -28,6 +28,16 @@ export default [
         url: '/invite-code',
         onlyAdmin: true
       },
+      {
+        title: '重置密码列表',
+        url: '/reset/password',
+        onlyAdmin: true
+      },
     ]
+  },
+  {
+    title: '个人设置',
+    url: '/profile',
+    onlyAdmin: false,
   },
 ]

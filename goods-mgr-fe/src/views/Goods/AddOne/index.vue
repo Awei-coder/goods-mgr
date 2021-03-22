@@ -39,7 +39,17 @@
         </a-form-item>
 
         <a-form-item label="分类">
-          <a-input v-model:value="addForm.classify" />
+          <a-select
+            v-model:value="addForm.classify"
+            style="width: 120px"
+          >
+          <!-- 把分类的id传给商品数据库 -->
+            <a-select-option
+            v-for="item in store.goodClassifyList"
+            :value="item._id"
+            :key="item._id"
+            >{{item.title}}</a-select-option>
+          </a-select>
         </a-form-item>
 
         <a-form-item label="库存">

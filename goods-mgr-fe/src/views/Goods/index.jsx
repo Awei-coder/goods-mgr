@@ -3,6 +3,7 @@ import AddOne from './AddOne/index.vue'
 import Update from './Update/index.vue'
 import { useRouter } from 'vue-router'
 import { good } from '@/service'
+import { getClassifyTitleById } from '@/helpers/good-classify'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import { message, Modal, Input } from 'ant-design-vue'
 
@@ -32,7 +33,9 @@ export default defineComponent({
       },
       {
         title: '分类',
-        dataIndex: 'classify',
+        slots: {
+          customRender: 'classify',
+        },
       },
       {
         title: '制造商',
@@ -216,7 +219,7 @@ export default defineComponent({
     }
 
     // 进入书籍详情页
-    const toDetail = ({record}) => {
+    const toDetail = ({ record }) => {
       router.push(`/goods/${record._id}`)
     }
 
@@ -239,6 +242,8 @@ export default defineComponent({
       curEditGood,
       updateGood,
       toDetail,
+      getList,
+      getClassifyTitleById,
     }
   }
 })

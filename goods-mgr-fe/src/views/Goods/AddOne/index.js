@@ -2,6 +2,7 @@ import { defineComponent, reactive } from 'vue'
 import { good } from '@/service'
 import { result, clone} from '@/helpers/utils'
 import { message } from 'ant-design-vue'
+import store from '@/store'
 
 const defaultFormData = {
   name: '',
@@ -14,10 +15,15 @@ const defaultFormData = {
 
 export default defineComponent({
   props: {
-    show: Boolean
+    show: Boolean,
   },
   setup(props, context) {
     const addForm = reactive(clone(defaultFormData))
+
+    // 设置分类默认值
+    if (store.state.goodClassifyList.length) {
+      addForm.classify = store.state.goodClassifyList[0]._id
+    }
 
     // 提交按钮
     const submit = async () => {
@@ -31,6 +37,7 @@ export default defineComponent({
         message.success(data.msg)
         // 浅拷贝清空表单
         Object.assign(addForm, defaultFormData)
+        context.emit('getList')
       })
     }
 
@@ -43,7 +50,8 @@ export default defineComponent({
       addForm,
       submit,
       props,
-      close
+      close,
+      store: store.state,
     }
   }
 })

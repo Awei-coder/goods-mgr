@@ -45,6 +45,16 @@ const routes = [
         name: 'inviteCode',
         component: () => import(/* webpackChunkName: "inviteCode" */ '../views/InviteCode/index.vue')
       },
+      {
+        path: 'good-classify',
+        name: 'goodClassify',
+        component: () => import(/* webpackChunkName: "goodClassify" */ '../views/GoodClassify/index.vue')
+      },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => import(/* webpackChunkName: "profile" */ '../views/Profile/index.vue')
+      },
     ]
   },
 ];
@@ -70,6 +80,9 @@ router.beforeEach(async (to, from, next) => {
   if(!store.state.userInfo.length) {
     await store.dispatch('getUserInfo')
   }
+
+  // 获取分类信息
+  await store.dispatch('getGoodClassify')
 
   // 统一处理promise请求, all请求全部完成后
   // await Promise.all(reqArr)

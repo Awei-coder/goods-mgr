@@ -3,6 +3,7 @@ import moment from 'moment'
 import { good } from '@/service'
 import { result } from '@/helpers/utils'
 import { message } from 'ant-design-vue'
+import store from '@/store'
 
 export default defineComponent({
   props: {
@@ -56,6 +57,7 @@ export default defineComponent({
       props,
       submit,
       close,
+      store: store.state,
     }
   }
 })

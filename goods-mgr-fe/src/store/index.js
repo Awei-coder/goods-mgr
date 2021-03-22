@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { character, user } from '@/service'
+import { character, user, goodClassify } from '@/service'
 import { result } from '@/helpers/utils'
 import { getCharacterInfoById } from '@/helpers/character'
 
@@ -8,6 +8,7 @@ export default createStore({
     characterInfo: [],
     userInfo: {},
     userCharacter: {},
+    goodClassifyList: [],
   },
   mutations: {
     // 参数(state对象, ...参数)
@@ -20,8 +21,21 @@ export default createStore({
     setUserCharacter(state, setUserCharacter) {
       state.userCharacter = setUserCharacter
     },
+    setGoodClassify(state, setGoodClassify) {
+      state.goodClassifyList = setGoodClassify
+    }
   },
   actions: {
+    // 获取分类信息
+    async getGoodClassify(context) {
+      const res = await goodClassify.list()
+
+      result(res)
+        .success(({data}) => {
+          context.commit('setGoodClassify', data)
+        })
+    },
+
     // 参数(context->具有和store一样的属性和方法)
     async getCharacterInfo(context) {
       // 获取角色列表

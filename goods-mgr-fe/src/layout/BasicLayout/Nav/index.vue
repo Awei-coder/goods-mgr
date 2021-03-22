@@ -16,10 +16,6 @@
             <span>{{ item.title }}</span>
           </span>
         </template>
-        <!-- <a-menu-item-group key="g1">
-          <a-menu-item key="1">Option 1</a-menu-item>
-          <a-menu-item key="2">Option 2</a-menu-item>
-        </a-menu-item-group> -->
         <a-menu-item v-for="(child) in item.children" :key="child.url" @click="to(child.url)">
           {{ child.title }}
         </a-menu-item>

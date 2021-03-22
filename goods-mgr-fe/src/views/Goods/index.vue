@@ -20,7 +20,7 @@
           >
         </div>
 
-        <a-button v-only-admin @click="show = true">添加一条</a-button>
+        <a-button v-only-admin @click="show = true" >添加一条</a-button>
       </space-between>
 
       <a-divider />
@@ -46,6 +46,11 @@
           {{ data.record.count }}
           <a href="javascript:;" @click="updateCount('OUT_COUNT', data.record)">出库</a>
         </template>
+
+        <!-- 分类信息 -->
+        <template #classify="{ record }">
+          {{ getClassifyTitleById(record.classify) }}
+        </template>
       </a-table>
       <space-between style="margin-top: 24px">
         <div></div>
@@ -57,7 +62,10 @@
         />
       </space-between>
       <!-- 添加一条商品功能 双向绑定show, 子传父通过子传过来的值修改父的值 -->
-      <add-one v-model:show="show" />
+      <add-one 
+      v-model:show="show"
+      @getList="getList"
+       />
       <!-- 修改商品功能 -->
       <!-- curEditGood把数据传给子组件 -->
       <update 
