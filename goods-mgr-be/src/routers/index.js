@@ -8,6 +8,7 @@ const log = require('./log')
 const forgetPassword = require('./forget-password')
 const goodClassify = require('./good-classify')
 const profile = require('./profile')
+const dashboard = require('./dashboard')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -30,4 +31,6 @@ module.exports = (app) => {
   app.use(goodClassify.routes())
   // 个人设置路由
   app.use(profile.routes())
+  // 仪表盘路由
+  app.use(dashboard.routes())
 }

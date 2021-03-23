@@ -2,10 +2,14 @@
   <div>
     <!-- loading效果 -->
     <a-spin :spinning="loading">
-      <a-card>
-        <h2>操作日志</h2>
+      <a-card
+        :title="simple ? '最近操作记录' : ''"
+      >
+        <div v-if="!simple">
+          <h2>操作日志</h2>
 
-        <a-divider />
+          <a-divider />
+        </div>
 
         <div>
           <a-table
@@ -13,17 +17,18 @@
             :columns="columns"
             :data-source="list"
             :pagination="false"
+            :scroll="{ x: 'max-content' }"
           >
             <template #createdAt="{ record }">
               {{ formatTimeStamp(record.meta.createdAt) }}
             </template>
-            <template #action="{ record }">
+            <template v-if="!simple" #action="{ record }">
               <a href="javascript:;" @click="remove(record)">删除</a>
             </template>
           </a-table>
         </div>
 
-        <flex-end style="margin-top: 24px">
+        <flex-end style="margin-top: 24px" v-if="!simple">
           <a-pagination
             v-model:value="curPage"
             :pageSize="20"

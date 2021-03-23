@@ -12,7 +12,11 @@ export default defineComponent({
     AddOne,
     Update,
   },
-  setup() {
+  props: {
+    simple: Boolean,
+  },
+  setup(props) {
+
     // 比如前进页 后退页 跳到某一页
     const router = useRouter()
 
@@ -48,14 +52,16 @@ export default defineComponent({
           customRender: 'manufactureDate',
         },
       },
-      {
+    ]
+
+    if(!props.simple) {
+      columns.push({
         title: '操作',
         slots: {
           customRender: 'actions',
         },
-      },
-    ]
-
+      },)
+    }
     // 显示隐藏添加商品表单变量
     const show = ref(false)
     // 显示隐藏修改商品表单变量
@@ -244,6 +250,8 @@ export default defineComponent({
       toDetail,
       getList,
       getClassifyTitleById,
+      // 总览的判断显示隐藏的simple
+      simple: props.simple
     }
   }
 })

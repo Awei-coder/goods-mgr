@@ -42,18 +42,23 @@ const routes = [
       },
       {
         path: 'invite-code',
-        name: 'inviteCode',
+        name: 'InviteCode',
         component: () => import(/* webpackChunkName: "inviteCode" */ '../views/InviteCode/index.vue')
       },
       {
         path: 'good-classify',
-        name: 'goodClassify',
+        name: 'GoodClassify',
         component: () => import(/* webpackChunkName: "goodClassify" */ '../views/GoodClassify/index.vue')
       },
       {
         path: 'profile',
-        name: 'profile',
+        name: 'Profile',
         component: () => import(/* webpackChunkName: "profile" */ '../views/Profile/index.vue')
+      },
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import(/* webpackChunkName: "bashboard" */ '../views/Dashboard/index.vue')
       },
     ]
   },
