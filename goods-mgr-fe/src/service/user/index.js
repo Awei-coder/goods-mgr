@@ -44,3 +44,10 @@ export const editCharacter = (characterId, userId) => {
 export const info = () => {
   return axios.get('http://localhost:3000/user/info')
 }
+
+// 拿到服务器返回的文件名字并上传给服务端
+export const addMany = (key) => {
+  return axios.post('http://localhost:3000/user/addMany', {
+    key
+  })
+}

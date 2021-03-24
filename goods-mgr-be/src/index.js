@@ -14,13 +14,21 @@ connect().then(() => {
   // 使用koa/cors解决同源问题  增加http请求头的方式解决跨域问题
   app.use(cors())
   // 使用koa-body中间件
-  app.use(koaBody())
+  app.use(koaBody({
+    // 支持文件上传
+    multipart: true,
+    // 一个库
+    formidable: {
+      // 文件最大限制200M
+      maxFileSize: 200 * 1024 * 1024
+    }
+  }))
 
   // 捕捉token错误  必须在koa-jwt中间件前, 这样才能捕获到它的错误
-  app.use(catchTokenError)
+  // app.use(catchTokenError)
 
-  // 注册koa-jwt中间件
-  koaJwtMiddleware(app)
+  // // 注册koa-jwt中间件
+  // koaJwtMiddleware(app)
 
   // 注册log中间件获取数据
   app.use(logMiddleware)

@@ -9,6 +9,7 @@ const forgetPassword = require('./forget-password')
 const goodClassify = require('./good-classify')
 const profile = require('./profile')
 const dashboard = require('./dashboard')
+const upload = require('./upload')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -33,4 +34,6 @@ module.exports = (app) => {
   app.use(profile.routes())
   // 仪表盘路由
   app.use(dashboard.routes())
+  // 上传文件路由
+  app.use(upload.routes())
 }

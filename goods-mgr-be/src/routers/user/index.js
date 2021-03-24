@@ -1,8 +1,9 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
-const {getBody} = require('../../helpers/utils')
+const { getBody } = require('../../helpers/utils')
 const config = require('../../project.config')
 const { verify, getToken } = require('../../helpers/token')
+const { loadExcel,getFirstSheet } = require('../../helpers/excel')
 
 const User = mongoose.model('User')
 const Character = mongoose.model('Character')
@@ -21,24 +22,24 @@ router.get('/list', async (ctx) => {
 
   // 如果处于搜索用户状态
   const query = {}
-  if(keyword) {
+  if (keyword) {
     query.account = keyword
   }
 
   page = Number(page)
   size = Number(size)
-  
+
   const list = await User
-  .find(query)
-  .sort({
-    _id: -1,
-  })
-  .skip((page - 1) * size)
-  .limit(size)
-  .exec()
+    .find(query)
+    .sort({
+      _id: -1,
+    })
+    .skip((page - 1) * size)
+    .limit(size)
+    .exec()
 
   const total = await User.countDocuments().exec()
-  
+
   ctx.body = {
     code: 1,
     msg: '查询用户成功',
@@ -117,7 +118,7 @@ router.post('/reset/password', async (ctx) => {
     _id: id
   })
 
-  if(!user) {
+  if (!user) {
     ctx.body = {
       code: 0,
       msg: '用户不存在',
@@ -165,8 +166,8 @@ router.post('/update/character', async (ctx) => {
   const one = await User.findOne({
     _id: userId
   })
-  
-  if(!one) {
+
+  if (!one) {
     ctx.body = {
       code: 0,
       msg: '出错了',
@@ -188,13 +189,55 @@ router.post('/update/character', async (ctx) => {
 })
 
 // 通过token换取用户信息
-router.get('/info', async(ctx) => {
+router.get('/info', async (ctx) => {
   // token存放于Authorization 请求头中 : Bearer token 
   ctx.body = {
     code: 1,
     msg: '获取成功',
     // 这里解析出来的就是一个user对象
-    data: await verify(getToken(ctx)), 
+    data: await verify(getToken(ctx)),
+  }
+})
+
+router.post('/addMany', async (ctx) => {
+  const {
+    key
+  } = getBody(ctx)
+
+  const path = `${config.UPLOAD_DIR}/${key}`
+
+  // 获取到excel
+  const excel = loadExcel(path)
+
+  // 解析excel成数组形式
+  const sheet = getFirstSheet(excel)
+
+  // 给批量添加的用户默认使用成员身份
+  const character = await Character.find().exec()
+  // 获取到成员身份的数据, 通过member._id就可以给批量添加的用户设置默认用户了
+  const member = character.find(item => {
+    return item.name === 'member'
+  })
+
+  const arr = []
+  sheet.forEach(record => {
+    const [account, password = config.DEFAULT_PASSWORD] = record
+
+    arr.push({
+      account,
+      password,
+      character: member._id,
+    })
+  });
+  
+  await User.insertMany(arr)
+
+  ctx.body = {
+    code: 1,
+    msg: '批量添加成功',
+    data: {
+      addCount: arr.length
+    }
   }
 })
 

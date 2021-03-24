@@ -133,7 +133,24 @@ export default defineComponent({
           // editForm.current 拿到的是record对象的引用, 而editForm.character是选择框选择的值
           // 用选择的值去更新前端
           editForm.current.character = editForm.character
-        }) 
+        })
+    }
+
+    // 上传
+    const onUploadChange = ({ file }) => {
+      // event里面的file
+      // 如果服务端给相应了
+      if(file.response) {
+        result(file.response)
+          .success(async (key) => {
+            const res = await user.addMany(key)
+            result(res)
+              .success(({data: {addCount}}) =>{
+                message.success(`成功添加${addCount}位用户`)
+                getUsers()
+              })
+          })
+      }
     }
 
     return {
@@ -158,6 +175,7 @@ export default defineComponent({
       onEdit,
       characterInfo: store.state.characterInfo,
       updateCharacter,
+      onUploadChange,
     }
   }
 })

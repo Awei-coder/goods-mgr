@@ -1,6 +1,8 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
 const { getBody } = require('../../helpers/utils')
+const config = require('../../project.config')
+const { loadExcel, getFirstSheet } = require('../../helpers/excel')
 
 // 出库入库常量
 const GOOD_COUST = {
@@ -12,6 +14,8 @@ const GOOD_COUST = {
 const Good = mongoose.model('Good')
 // 获取出入库日志表
 const InventoryLog = mongoose.model('InventoryLog')
+// 获取分类表
+const Classify = mongoose.model('GoodClassify')
 
 // 创建路由
 const router = new Router({
@@ -34,27 +38,27 @@ router.get('/list', async (ctx) => {
   // 如果keyword不为空
   let query = {}
 
-  if(keyword) {
+  if (keyword) {
     query.name = keyword
   }
 
 
   const list = await Good
-  // find可以接收一个对象 按照对象里面给的属性当做条件去查找数据
-  .find(query)
-  .sort({
-    // 倒序
-    _id: -1,
-  })
-  // 跳过几页 共几条数据
-  .skip((page - 1) * size)
-  // 查询几条数据
-  .limit(size)
-  .exec()
+    // find可以接收一个对象 按照对象里面给的属性当做条件去查找数据
+    .find(query)
+    .sort({
+      // 倒序
+      _id: -1,
+    })
+    // 跳过几页 共几条数据
+    .skip((page - 1) * size)
+    // 查询几条数据
+    .limit(size)
+    .exec()
 
   // 获取商品数量
   const total = await Good.countDocuments();
-  
+
   ctx.response.body = {
     code: 1,
     msg: '列出商品成功',
@@ -138,7 +142,7 @@ router.post('/update/count', async (ctx) => {
     _id: id
   }).exec()
 
-  if(!good) {
+  if (!good) {
     ctx.body = {
       code: 0,
       msg: '没有找到相关商品',
@@ -147,10 +151,10 @@ router.post('/update/count', async (ctx) => {
   }
 
   // 如果找到了商品
-  if(type === GOOD_COUST.IN) {
+  if (type === GOOD_COUST.IN) {
     // 入库操作
     num = Math.abs(num)
-  }else {
+  } else {
     // 出库操作
     num = -Math.abs(num)
   }
@@ -158,7 +162,7 @@ router.post('/update/count', async (ctx) => {
   good.count += num;
 
   // 如果库存为负数
-  if(good.count < 0) {
+  if (good.count < 0) {
     ctx.body = {
       code: 0,
       msg: '商品库存不足',
@@ -173,7 +177,7 @@ router.post('/update/count', async (ctx) => {
     type,
     num: Math.abs(num)
   })
-  
+
   log.save()
 
   ctx.body = {
@@ -201,7 +205,7 @@ router.post('/update', async (ctx) => {
     _id: id
   }).exec()
 
-  if(!one) {
+  if (!one) {
     ctx.body = {
       code: 0,
       msg: '没有找到相关商品',
@@ -215,14 +219,14 @@ router.post('/update', async (ctx) => {
   //Object.entries() 例如:{name: 'zhangsan',age: 18} 转换为=> [['name','zhangsan'], ['age','18']]
   // [key, value] = ['name','zhangsan'] 解构出数据
   Object.entries(other).forEach(([key, value]) => {
-    if(value) {
+    if (value) {
       newQuery[key] = value
     }
   })
 
   // 修改查找到的数据
   Object.assign(one, newQuery)
-  
+
   // 保存数据插入表
   const res = await one.save()
 
@@ -244,7 +248,7 @@ router.get('/detail/:id', async (ctx) => {
     _id: id
   })
 
-  if(!one) {
+  if (!one) {
     ctx.body = {
       code: 0,
       msg: '没有找到相关商品',
@@ -257,7 +261,69 @@ router.get('/detail/:id', async (ctx) => {
     msg: '查询成功',
     data: one
   }
-  
+
+})
+
+// 批量添加商品
+router.post('/addMany', async (ctx) => {
+  const {
+    key = ''
+  } = getBody(ctx)
+
+  const path = `${config.UPLOAD_DIR}/${key}`
+
+  // 获取到excel
+  const excel = loadExcel(path)
+
+  // 解析excel成数组形式
+  const sheet = getFirstSheet(excel)
+
+  const arr = []
+  for (let i = 0; i < sheet.length; i++) {
+    let record = sheet[i]
+    const [
+      name,
+      price,
+      manufacturer,
+      manufactureDate,
+      classify,
+      count,
+    ] = record
+
+    let classifyId = classify
+
+    // 查找分类的id
+    const one = await Classify.findOne({
+      // 这里传的是excel表传进来的名字 -> 例如'食品'
+      title: classifyId
+    })
+
+    if (one) {
+      // 如果存在就把这个分类的id赋值给classifyId
+      classifyId = one._id
+    }
+
+    arr.push({
+      name,
+      price,
+      manufacturer,
+      // 处理时间
+      manufactureDate: (new Date(1900, 0, manufactureDate)).valueOf(),
+      classify: classifyId,
+      count,
+    })
+
+  }
+
+  await Good.insertMany(arr)
+
+  ctx.body = {
+    code: 1,
+    msg: '批量添加成功',
+    data: {
+      addCount: arr.length
+    }
+  }
 })
 
 module.exports = router

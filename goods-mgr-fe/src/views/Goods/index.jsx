@@ -229,6 +229,23 @@ export default defineComponent({
       router.push(`/goods/${record._id}`)
     }
 
+    // 批量上传
+    const onUploadChange = ({ file }) => {
+      // event里面的file
+      // 如果服务端给相应了
+      if(file.response) {
+        result(file.response)
+          .success(async (key) => {
+            const res = await good.addMany(key)
+            result(res)
+              .success(({data: {addCount}}) =>{
+                message.success(`成功添加${addCount}中商品`)
+                getList()
+              })
+          })
+      }
+    }
+
     return {
       columns,
       show,
@@ -251,7 +268,8 @@ export default defineComponent({
       getList,
       getClassifyTitleById,
       // 总览的判断显示隐藏的simple
-      simple: props.simple
+      simple: props.simple,
+      onUploadChange,
     }
   }
 })

@@ -18,7 +18,19 @@
           >
         </div>
 
-        <a-button @click="showAddModal = true">添加用户</a-button>
+        <div>
+          <a-button @click="showAddModal = true">添加用户</a-button>
+          &nbsp;
+          <a-upload
+            @change="onUploadChange"
+            action="http://localhost:3000/upload/file"
+          >
+            <!-- :headers="headers" -->
+            <a-button type="primary">
+              上传 Excel 添加
+            </a-button>
+          </a-upload>
+        </div>
       </space-between>
 
       <a-divider></a-divider>
@@ -61,15 +73,19 @@
     </a-card>
 
     <!-- 编辑角色框 -->
-    <a-modal v-model:visible="showEditCharacterModal" title="修改角色" @ok="updateCharacter">
+    <a-modal
+      v-model:visible="showEditCharacterModal"
+      title="修改角色"
+      @ok="updateCharacter"
+    >
       <a-select v-model:value="editForm.character" style="width: 174px">
         <a-select-option
           v-for="item in characterInfo"
           :key="item._id"
           :value="item._id"
-          >
+        >
           {{ item.title }}
-          </a-select-option>
+        </a-select-option>
       </a-select>
     </a-modal>
   </div>

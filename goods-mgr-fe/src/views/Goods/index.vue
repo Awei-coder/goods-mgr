@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card :title="simple ? '最近添加的商品' : '' ">
+    <a-card :title="simple ? '最近添加的商品' : ''">
       <div v-if="!simple">
         <h2>商品列表</h2>
 
@@ -21,7 +21,19 @@
             >
           </div>
 
-          <a-button v-only-admin @click="show = true">添加一条</a-button>
+          <div>
+            <a-button v-only-admin @click="show = true">添加一条</a-button>
+            &nbsp;
+            <a-upload
+              @change="onUploadChange"
+              action="http://localhost:3000/upload/file"
+            >
+              <!-- :headers="headers" -->
+              <a-button type="primary">
+                上传 Excel 添加
+              </a-button>
+            </a-upload>
+          </div>
         </space-between>
 
         <a-divider />
@@ -32,7 +44,7 @@
         :data-source="list"
         :pagination="false"
         bordered
-        :scroll="{x: 'max-content' }"
+        :scroll="{ x: 'max-content' }"
       >
         <template #manufactureDate="data">
           <!-- 格式化出厂日期 -->

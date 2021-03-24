@@ -48,3 +48,10 @@ export const detail = (id) => {
     `http://localhost:3000/good/detail/${id}`
   )
 }
+
+// 拿到服务器返回的文件名字并上传给服务端
+export const addMany = (key) => {
+  return axios.post('http://localhost:3000/good/addMany', {
+    key
+  })
+}
