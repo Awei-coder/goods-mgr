@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import store from '@/store'
+import { user } from '@/service'
+import { message } from 'ant-design-vue'
 
 const routes = [
   {
@@ -11,6 +13,7 @@ const routes = [
   {
     path: '/',
     name: 'BasicLayout',
+    redirect: '/auth',
     // 路由懒加载
     component: () => import(/* webpackChunkName: "basicLayout" */ '../layout/BasicLayout/index.vue'),
     children: [
@@ -73,16 +76,43 @@ const router = createRouter({
 // 导航守卫
 router.beforeEach(async (to, from, next) => {
 
+  let res = {}
+
+  try {
+    res = await user.info()
+  } catch(e) {
+    if(e.message.includes('code 401')) {
+      res.code = 401
+    }
+  }
+
+  const { code } = res
+
+  if(code === 401) {
+    // 如果下一个路由的auth, 直接放行
+    if (to.path === '/auth') {
+      next()
+      return
+    }
+
+    message.error('认证失败, 请重新登陆！')
+    // 跳转到auth路由
+    next('/auth')
+
+    return
+  }
+
+
   // 设置处理请求用户数据的数组
   // const reqArr = []
 
   // 如果stote下的character不为空 获取角色信息大全
-  if(!store.state.characterInfo.length) {
+  if (!store.state.characterInfo.length) {
     await store.dispatch('getCharacterInfo')
   }
 
   // 进入先发送info请求
-  if(!store.state.userInfo.length) {
+  if (!store.state.userInfo.length) {
     await store.dispatch('getUserInfo')
   }
 
@@ -91,6 +121,12 @@ router.beforeEach(async (to, from, next) => {
 
   // 统一处理promise请求, all请求全部完成后
   // await Promise.all(reqArr)
+
+  // 如果已经登陆就不让进入auth页面了
+  if(to.path === '/auth') {
+    next('/goods')
+    return
+  }
 
   next()
 })

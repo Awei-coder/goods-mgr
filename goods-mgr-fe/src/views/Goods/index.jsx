@@ -6,6 +6,7 @@ import { good } from '@/service'
 import { getClassifyTitleById } from '@/helpers/good-classify'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import { message, Modal, Input } from 'ant-design-vue'
+import { getHeaders } from '@/helpers/request'
 
 export default defineComponent({
   components: {
@@ -270,6 +271,8 @@ export default defineComponent({
       // 总览的判断显示隐藏的simple
       simple: props.simple,
       onUploadChange,
+      // 添加批量添加请求头
+      headers: getHeaders(),
     }
   }
 })

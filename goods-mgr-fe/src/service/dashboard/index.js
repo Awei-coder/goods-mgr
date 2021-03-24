@@ -1,5 +1,5 @@
-import axios from 'axios'
+import { get } from '@/helpers/request'
 
 export const baseInfo = () => {
-  return axios.get('http://localhost:3000/dashboard/base-info')
+  return get('/dashboard/base-info')
 }

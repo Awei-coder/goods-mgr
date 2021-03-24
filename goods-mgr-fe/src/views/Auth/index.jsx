@@ -103,8 +103,14 @@ export default defineComponent({
       const res = await auth.login(loginForm.account, loginForm.password)
       // 处理axios返回逻辑
       result(res)
-        .success(({ msg, data: { user, token } }, response) => {
+        .success(async ({ msg, data: { user, token } }, response) => {
           message.success(msg)
+
+          // 设置token
+          setToken(token)
+          
+          // 获取角色列表
+          await store.dispatch('getCharacterInfo')
 
           // 设置登陆用户的状态
           store.commit('setUserInfo', user)
@@ -112,8 +118,6 @@ export default defineComponent({
           // 设置用户角色
           store.commit('setUserCharacter', getCharacterInfoById(user.character))
 
-          // 设置token
-          setToken(token)
 
           // 进入页面
           router.replace('/goods')

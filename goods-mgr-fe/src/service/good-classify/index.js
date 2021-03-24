@@ -1,22 +1,22 @@
-import axios from 'axios'
+import { del, post, get } from '@/helpers/request'
 
 export const list = () => {
-  return axios.get('http://localhost:3000/good-classify/list')
+  return get('/good-classify/list')
 }
 
 export const add = (title) => {
-  return axios.post('http://localhost:3000/good-classify/add', {
+  return post('/good-classify/add', {
     title
   })
 }
 
 export const update = (id, title) => {
-  return axios.post('http://localhost:3000/good-classify/update/title', {
+  return post('/good-classify/update/title', {
     id,
     title
   })
 }
 
 export const remove = (id) => {
-  return axios.delete(`http://localhost:3000/good-classify/${id}`)
+  return del(`/good-classify/${id}`)
 }

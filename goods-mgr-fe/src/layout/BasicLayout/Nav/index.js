@@ -7,11 +7,19 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const openKeys = ref([])
+    const openKeys = ref(['其它'])
     const selectedKeys = ref([])
 
     onMounted(() => {
       selectedKeys.value = [route.path]
+
+      menu.forEach(item => {
+        (item.children || []).forEach(child => {
+          if(child.url === route.path) {
+            openKeys.value.push(item.title)
+          }
+        })
+      });
     })
 
     // 导航切换功能

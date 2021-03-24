@@ -5,6 +5,7 @@ import { getCharacterInfoById } from '@/helpers/character'
 import { message } from 'ant-design-vue'
 import AddOne from './AddOne/index.vue'
 import { EditOutlined } from '@ant-design/icons-vue'
+import { getHeaders } from '@/helpers/request'
 import store from '@/store'
 
 export default defineComponent({
@@ -140,12 +141,12 @@ export default defineComponent({
     const onUploadChange = ({ file }) => {
       // event里面的file
       // 如果服务端给相应了
-      if(file.response) {
+      if (file.response) {
         result(file.response)
           .success(async (key) => {
             const res = await user.addMany(key)
             result(res)
-              .success(({data: {addCount}}) =>{
+              .success(({ data: { addCount } }) => {
                 message.success(`成功添加${addCount}位用户`)
                 getUsers()
               })
@@ -176,6 +177,8 @@ export default defineComponent({
       characterInfo: store.state.characterInfo,
       updateCharacter,
       onUploadChange,
+      // 添加批量添加请求头
+      headers: getHeaders(),
     }
   }
 })

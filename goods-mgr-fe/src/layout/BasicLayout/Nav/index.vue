@@ -9,7 +9,10 @@
       key="item.url"
       v-only-admin="item.onlyAdmin"
     >
-      <a-sub-menu v-if="item.children">
+      <a-sub-menu
+       v-if="item.children"
+       :key="item.title"
+       >
         <template #title>
           <span>
             <MailOutlined />

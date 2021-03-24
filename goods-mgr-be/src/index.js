@@ -3,7 +3,7 @@ const koaBody = require('koa-body')
 const cors = require('@koa/cors')
 const { connect } = require('./db')
 const Routes = require('./routers/index')
-const { middleware: koaJwtMiddleware ,catchTokenError} = require('./helpers/token')
+const { middleware: koaJwtMiddleware, catchTokenError, checkUser } = require('./helpers/token')
 const { logMiddleware } = require('./helpers/log')
 
 const app = new Koa()
@@ -25,10 +25,13 @@ connect().then(() => {
   }))
 
   // 捕捉token错误  必须在koa-jwt中间件前, 这样才能捕获到它的错误
-  // app.use(catchTokenError)
+  app.use(catchTokenError)
 
-  // // 注册koa-jwt中间件
-  // koaJwtMiddleware(app)
+  // 注册koa-jwt中间件
+  koaJwtMiddleware(app)
+
+  // 检验用户是否存在中间件
+  app.use(checkUser)
 
   // 注册log中间件获取数据
   app.use(logMiddleware)

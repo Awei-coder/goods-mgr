@@ -1,10 +1,9 @@
-import axios from 'axios'
-
+import { del, post, get } from '@/helpers/request'
 //  注册和登陆请求
 
 export const register = (account, password, inviteCode) => {
   // 第二个为参数传过去后端, 返回一个promised
-  return axios.post('http://localhost:3000/auth/register', {
+  return post('/auth/register', {
     account,
     password,
     inviteCode,
@@ -12,7 +11,7 @@ export const register = (account, password, inviteCode) => {
 }
 
 export const login = (account, password) => {
-  return axios.post('http://localhost:3000/auth/login', {
+  return post('/auth/login', {
     account,
     password
   })
