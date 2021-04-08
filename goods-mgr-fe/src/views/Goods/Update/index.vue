@@ -5,6 +5,8 @@
       title="添加书籍"
       @ok="submit"
       @cancel="close"
+      okText='确定'
+      cancelText='取消'
     >
       <!-- // 商品名
         name: String,

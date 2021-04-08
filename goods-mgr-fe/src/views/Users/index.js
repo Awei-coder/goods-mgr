@@ -2,7 +2,7 @@ import { defineComponent, ref, onMounted, reactive } from 'vue'
 import { user } from '@/service'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import { getCharacterInfoById } from '@/helpers/character'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import AddOne from './AddOne/index.vue'
 import { EditOutlined } from '@ant-design/icons-vue'
 import { getHeaders } from '@/helpers/request'
@@ -75,13 +75,23 @@ export default defineComponent({
 
     // 删除用户方法
     const remove = async ({ _id }) => {
-      const res = await user.remove(_id)
+      Modal.confirm({
+        title: `确认要删除该用户吗？`,
+        okText: '确定',
+        cancelText: '取消',
+        okType: 'danger',
 
-      result(res)
-        .success(({ msg }) => {
-          message.success(msg)
-          getUsers()
-        })
+        // 确定按钮
+        onOk: async () => {
+          const res = await user.remove(_id)
+
+          result(res)
+            .success(({ msg }) => {
+              message.success(msg)
+              getUsers()
+            })
+        }
+      })
     }
 
     // 设置页码切换
@@ -93,12 +103,23 @@ export default defineComponent({
 
     // 重置密码功能
     const resetPassword = async ({ _id }) => {
-      const res = await user.resetPassword(_id)
 
-      result(res)
-        .success(({ msg }) => {
-          message.success(msg)
-        })
+      Modal.confirm({
+        title: `确认要重置密码吗？`,
+        okText: '确定',
+        cancelText: '取消',
+
+        // 确定按钮
+        onOk: async () => {
+          const res = await user.resetPassword(_id)
+
+          result(res)
+            .success(({ msg }) => {
+              message.success(msg)
+            })
+        }
+      })
+
     }
 
     // 点击搜索功能

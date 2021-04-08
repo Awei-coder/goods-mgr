@@ -55,13 +55,13 @@ export default defineComponent({
       },
     ]
 
-    if(!props.simple) {
+    if (!props.simple) {
       columns.push({
         title: '操作',
         slots: {
           customRender: 'actions',
         },
-      },)
+      })
     }
     // 显示隐藏添加商品表单变量
     const show = ref(false)
@@ -136,21 +136,33 @@ export default defineComponent({
     // 删除商品功能
     // 获取商品的id
     const remove = async ({ record: { _id: id } }) => {
-      // 发送删除请求
-      const res = await good.remove(id)
 
-      result(res)
-        .success(({ msg }) => {
-          message.success(msg)
-          // 向服务端发送请求更新数据的方法
-          // getList()
+      Modal.confirm({
+        title: `确认要删除该商品吗？`,
+        okText: '确定',
+        cancelText: '取消',
+        okType: 'danger',
 
-          // 直接在前端更新数据的方法 减少http请求,减轻服务端压力
-          const idx = list.value.findIndex(item => {
-            return item._id === id
-          })
-          list.value.splice(idx, 1)
-        })
+        // 确定按钮
+        onOk: async () => {
+          // 发送删除请求
+          const res = await good.remove(id)
+
+          result(res)
+            .success(({ msg }) => {
+              message.success(msg)
+              // 向服务端发送请求更新数据的方法
+              // getList()
+
+              // 直接在前端更新数据的方法 减少http请求,减轻服务端压力
+              const idx = list.value.findIndex(item => {
+                return item._id === id
+              })
+              list.value.splice(idx, 1)
+            })
+        }
+      })
+
     }
 
     // 显示更新弹框
@@ -176,6 +188,8 @@ export default defineComponent({
 
       Modal.confirm({
         title: `请输入${word}的库存`,
+        okText: '确定',
+        cancelText: '取消',
         content: (
           <div>
             <Input class="__good_input_count" />
@@ -234,12 +248,12 @@ export default defineComponent({
     const onUploadChange = ({ file }) => {
       // event里面的file
       // 如果服务端给相应了
-      if(file.response) {
+      if (file.response) {
         result(file.response)
           .success(async (key) => {
             const res = await good.addMany(key)
             result(res)
-              .success(({data: {addCount}}) =>{
+              .success(({ data: { addCount } }) => {
                 message.success(`成功添加${addCount}中商品`)
                 getList()
               })

@@ -24,12 +24,12 @@ export default defineComponent({
     const total = ref(0)
     const curPage = ref(1)
     const list = ref([])
-    
+
     const getList = async () => {
       const res = await goodClassify.list()
 
       result(res)
-        .success(({data}) => {
+        .success(({ data }) => {
           list.value = data
         })
     }
@@ -38,24 +38,34 @@ export default defineComponent({
       const res = await goodClassify.add(title.value)
 
       result(res)
-        .success(({msg}) => {
+        .success(({ msg }) => {
           message.success(msg)
           getList()
           title.value = ''
         })
     }
 
-    const remove = async ({_id}) => {
-      const res = await goodClassify.remove(_id)
+    const remove = async ({ _id }) => {
+      Modal.confirm({
+        title: `确认要删除该分类吗？`,
+        okText: '确定',
+        cancelText: '取消',
+        okType: 'danger',
 
-      result(res)
-        .success(({msg}) => {
-          message.success(msg)
-          getList()
-        })
+        // 确定按钮
+        onOk: async () => {
+          const res = await goodClassify.remove(_id)
+
+          result(res)
+            .success(({ msg }) => {
+              message.success(msg)
+              getList()
+            })
+        }
+      })
     }
 
-    const update = async ({_id}) => {
+    const update = async ({ _id }) => {
       Modal.confirm({
         title: `请输入新的分类名`,
         content: (
@@ -70,12 +80,12 @@ export default defineComponent({
           const res = await goodClassify.update(_id, el.value)
 
           result(res)
-            .success(({msg}) => {
+            .success(({ msg }) => {
               message.success(msg)
               // getList()
               // 减少服务端请求
               list.value.forEach(item => {
-                if(item._id === _id) {
+                if (item._id === _id) {
                   item.title = el.value
                 }
               })

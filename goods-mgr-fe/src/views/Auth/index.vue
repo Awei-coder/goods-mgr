@@ -3,7 +3,7 @@
     <div class="bg"></div>
     <div class="title-info">
       <img
-        src="https://ncstatic.clewm.net/rsrc/2020/1016/02/4757e4910cb527fc040d019a93ded74f.png?x-oss-process=image/resize,w_750/format,gif/sharpen,100/quality,Q_80/interlace,1/auto-orient,1"
+        src="@/assets/logo.jpeg"
         alt=""
       />
       <h2 class="title">商品库存管理系统 后台</h2>
