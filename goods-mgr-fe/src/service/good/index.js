@@ -50,3 +50,7 @@ export const addMany = (key) => {
     key
   })
 }
+
+export const getGoodStore = () => {
+  return get('/good/getStore')
+}

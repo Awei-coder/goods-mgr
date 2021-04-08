@@ -326,4 +326,45 @@ router.post('/addMany', async (ctx) => {
   }
 })
 
+// 获取分类库存信息
+router.get('/getStore', async(ctx) => {
+
+  // 最终返回一个数组
+  const result = []
+
+  // 获取全部商品
+  const res = await Good.find()
+  // 获取分类数量
+  const classify = await Classify
+    .find()
+    .sort({
+      _id: -1
+    })
+    .exec()
+
+    // 获取各个分类商品的总数
+  classify.forEach(classifyItem => {
+    let total = 0
+    res.forEach(resItem => {
+      if(classifyItem._id == resItem.classify) {
+        total += resItem.count
+      }
+    })
+    result.push(total)
+  })
+
+  // 去除为0的数据
+  // result.forEach((item, index) => {
+  //   if(item === 0) {
+  //     result.splice(index, 1)
+  //   }
+  // })
+
+  ctx.body = {
+    code: 1,
+    msg: '获取库存信息成功',
+    data: result,
+  }
+})
+
 module.exports = router

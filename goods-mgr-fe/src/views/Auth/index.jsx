@@ -118,7 +118,6 @@ export default defineComponent({
           // 设置用户角色
           store.commit('setUserCharacter', getCharacterInfoById(user.character))
 
-
           // 进入页面
           router.replace('/goods')
 

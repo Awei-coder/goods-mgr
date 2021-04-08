@@ -63,6 +63,11 @@ const routes = [
         name: 'Dashboard',
         component: () => import(/* webpackChunkName: "bashboard" */ '../views/Dashboard/index.vue')
       },
+      {
+        path: 'out-input',
+        name: 'OutInput',
+        component: () => import(/* webpackChunkName: "bashboard" */ '../views/OutInput/index.vue')
+      },
     ]
   },
 ];
@@ -122,7 +127,7 @@ router.beforeEach(async (to, from, next) => {
   // 统一处理promise请求, all请求全部完成后
   // await Promise.all(reqArr)
 
-  // 如果已经登陆就不让进入auth页面了
+  // 如果走到这便是已经登陆就不让进入auth页面了
   if(to.path === '/auth') {
     next('/goods')
     return

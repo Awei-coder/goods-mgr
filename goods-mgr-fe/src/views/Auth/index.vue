@@ -33,7 +33,11 @@
           </div>
 
           <div class="item">
-            <a-button size="large" type="primary" @click="login">登陆</a-button>
+            <a-button 
+            size="large"
+             type="primary"
+            @click="login"
+            >登陆</a-button>
           </div>
         </a-tab-pane>
 

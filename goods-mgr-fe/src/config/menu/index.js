@@ -10,6 +10,11 @@ export default [
     onlyAdmin: false,
   },
   {
+    title: '库存情况',
+    url: '/out-input',
+    onlyAdmin: true,
+  },
+  {
     title: '用户管理',
     url: '/user',
     onlyAdmin: true,
