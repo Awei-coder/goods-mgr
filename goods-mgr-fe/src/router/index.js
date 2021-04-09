@@ -68,6 +68,11 @@ const routes = [
         name: 'OutInput',
         component: () => import(/* webpackChunkName: "bashboard" */ '../views/OutInput/index.vue')
       },
+      {
+        path: 'notice',
+        name: 'Notice',
+        component: () => import(/* webpackChunkName: "notice" */ '../views/Notice/index.vue')
+      },
     ]
   },
 ];

@@ -34,6 +34,11 @@ export default [
         onlyAdmin: true
       },
       {
+        title: '公告功能',
+        url: '/notice',
+        onlyAdmin: true
+      },
+      {
         title: '邀请码',
         url: '/invite-code',
         onlyAdmin: true

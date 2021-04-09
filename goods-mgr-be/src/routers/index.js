@@ -10,6 +10,7 @@ const goodClassify = require('./good-classify')
 const profile = require('./profile')
 const dashboard = require('./dashboard')
 const upload = require('./upload')
+const notice = require('./notice')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -36,4 +37,6 @@ module.exports = (app) => {
   app.use(dashboard.routes())
   // 上传文件路由
   app.use(upload.routes())
+  // 公告路由
+  app.use(notice.routes())
 }
