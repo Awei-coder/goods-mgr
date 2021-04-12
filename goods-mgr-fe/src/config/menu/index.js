@@ -10,7 +10,7 @@ export default [
     onlyAdmin: false,
   },
   {
-    title: '库存情况',
+    title: '统计报表',
     url: '/out-input',
     onlyAdmin: true,
   },

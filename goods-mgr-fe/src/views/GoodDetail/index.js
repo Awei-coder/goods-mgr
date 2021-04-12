@@ -5,6 +5,7 @@ import { result, formatTimeStamp } from '@/helpers/utils'
 import { message } from 'ant-design-vue'
 import Update from '@/views/Goods/Update/index.vue'
 import { CheckOutlined } from '@ant-design/icons-vue'
+import store from '@/store'
 
 
 export default defineComponent({
@@ -14,6 +15,9 @@ export default defineComponent({
     CheckOutlined,
   },
   setup() {
+    // 获取分类
+    const { goodClassifyList } = store.state
+
     // 表示当前页面跟路由的相关信息 比如url参数 params参数
     const route = useRoute()
     const router = useRouter()
@@ -46,20 +50,29 @@ export default defineComponent({
       },
     ]
 
+    // 获取具体分类
+    const getSpecifyClassify =  (data) => {
+      const one = goodClassifyList.find(item => {
+        return item._id === data.classify
+      })
+      data.classify = one.title
+    }
+
     // 获取服务端传过来的数据 获取商品详情信息
     const getDetail = async (id) => {
       const res = await good.detail(id)
 
       result(res)
         .success(({ data }) => {
+          getSpecifyClassify(data)
           detailInfo.value = data
         })
     }
-
     
     // 获取出入库日志
     const getInventoryLog = async () => {
-      const res = await inventoryLog.list(curLogType.value, logCurPage.value, 10)
+      // 这里传入的id是当前操作商品的id, 用于筛选出入库日志
+      const res = await inventoryLog.list(curLogType.value, logCurPage.value, 10, id)
 
       result(res)
         .success(({data: {list, total}}) => {
@@ -101,6 +114,7 @@ export default defineComponent({
 
     // 更新商品
     const updateGood = (newData) => {
+      getSpecifyClassify(newData)
       Object.assign(detailInfo.value, newData)
     }
 

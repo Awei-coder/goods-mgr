@@ -13,6 +13,7 @@ const router = new Router({
 router.get('/list', async (ctx) => {
   const {
     type,
+    goodName,
   } = ctx.query
 
   let {
@@ -26,12 +27,13 @@ router.get('/list', async (ctx) => {
   // 获取查询到几条日志
   const total = await InventoryLog.find({
     type,
+    goodName,
   }).countDocuments().exec()
-
 
   const list = await InventoryLog
     .find({
       type,
+      goodName,
     })
     .sort({
       // 倒序
@@ -54,6 +56,30 @@ router.get('/list', async (ctx) => {
 
 })
 
+router.get('/getSaleValue', async (ctx) => {
+  const {
+    startTime,
+    endTime,
+  } = ctx.query
+
+  const list = await InventoryLog
+    .find(
+      // 查询近五天的数据
+      {
+        "meta.updatedAt": { $gt: startTime, $lt: endTime }
+      }
+    )
+    .sort({
+      _id: -1
+    })
+    .exec()
+
+  ctx.body = {
+    code: 1,
+    msg: '查询数据成功',
+    data: list
+  }
+})
 
 // 导出路由
 module.exports = router

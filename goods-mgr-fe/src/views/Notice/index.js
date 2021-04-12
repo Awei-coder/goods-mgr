@@ -10,9 +10,9 @@ export default defineComponent({
 
     // 显示隐藏添加公告表单变量
     const show = ref(false)
+
     return {
       show,
-
     }
   }
 })

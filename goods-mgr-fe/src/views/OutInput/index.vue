@@ -1,9 +1,13 @@
 <template>
   <div>
     <a-card>
-      <div><h2>分类库存详情</h2></div>
+      <a-card>
+        <div id="showValue" style="width: 100%; height: 400px"></div>
+      </a-card>
       <a-divider></a-divider>
-      <div id="main" style="width: 100%;height:400px;"></div>
+      <a-card>
+        <div id="showStore" style="width: 100%; height: 400px"></div>
+      </a-card>
     </a-card>
   </div>
 </template>
@@ -12,5 +16,4 @@
 </script>
 
 <style scoped>
-
 </style>

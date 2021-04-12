@@ -1,5 +1,7 @@
-import { defineComponent, reactive, onMounted } from 'vue'
-import { result, clone} from '@/helpers/utils'
+import { defineComponent, reactive } from 'vue'
+import { addOne } from '@/service'
+import { result, clone } from '@/helpers/utils'
+import { message } from 'ant-design-vue'
 
 const defaultFormData = {
   title: '',
@@ -11,11 +13,24 @@ export default defineComponent({
     show: Boolean,
   },
 
-  setup(props) {
+  setup(props, context) {
     const addForm = reactive(clone(defaultFormData))
 
-    const submit = () => {}
-    const close = () => {}
+    const submit = async () => { 
+      const res = await addOne.addNotice(addForm.title, addForm.content)
+
+      result(res)
+        .success(({msg}) => {
+          message.success(msg)
+          // 置空表单
+          Object.assign(addForm, defaultFormData)
+        })
+    }
+
+    // 关闭
+    const close = () => {
+      context.emit('update:show', false)
+    }
 
     return {
       submit,

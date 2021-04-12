@@ -28,6 +28,8 @@ router.get('/list', async (ctx) => {
   const {
     page = 1,
     keyword = '',
+    // 这个是可视化所查询需要的id
+    _id,
   } = ctx.query
 
   let {
@@ -38,6 +40,10 @@ router.get('/list', async (ctx) => {
   // 如果keyword不为空
   let query = {}
 
+  // 如果_id不为空
+  if(_id) {
+    query.classify = _id
+  }
   if (keyword) {
     query.name = keyword
   }
@@ -175,7 +181,8 @@ router.post('/update/count', async (ctx) => {
   // 更新出入库记录
   const log = new InventoryLog({
     type,
-    num: Math.abs(num)
+    num: Math.abs(num),
+    goodName: id,
   })
 
   log.save()
@@ -352,13 +359,6 @@ router.get('/getStore', async(ctx) => {
     })
     result.push(total)
   })
-
-  // 去除为0的数据
-  // result.forEach((item, index) => {
-  //   if(item === 0) {
-  //     result.splice(index, 1)
-  //   }
-  // })
 
   ctx.body = {
     code: 1,

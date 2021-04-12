@@ -51,6 +51,7 @@ export const addMany = (key) => {
   })
 }
 
+// 获取库存信息
 export const getGoodStore = () => {
   return get('/good/getStore')
 }
