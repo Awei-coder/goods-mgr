@@ -59,3 +59,10 @@ export const formatTimeStamp = (ts) => {
 
   return `${YYYY}/${MM}/${DD} ${hh}:${mm}:${ss}`
 }
+
+// 数组去重
+export const uniqueArr = (arr) => {
+  const set = new Set(arr)
+
+  return [...set]
+}

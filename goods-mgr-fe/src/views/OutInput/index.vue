@@ -2,7 +2,11 @@
   <div>
     <a-card>
       <a-card>
-        <div id="showValue" style="width: 100%; height: 400px"></div>
+        <div id="showDaySaleValue" style="width: 100%; height: 400px"></div>
+      </a-card>
+      <a-divider></a-divider>
+      <a-card>
+        <div id="showDayStoreValue" style="width: 100%; height: 400px"></div>
       </a-card>
       <a-divider></a-divider>
       <a-card>
