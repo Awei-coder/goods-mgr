@@ -22,4 +22,4 @@ export * as profile from './profile'
 
 export * as dashboard from './dashboard'
 
-export * as addOne from './Notice'
+export * as notice from './Notice'

@@ -56,7 +56,7 @@
           <template #actions="{ record }">
             <a href="javascript:;" @click="resetPassword(record)">重置密码</a>
             &nbsp;
-            <a href="javascript:;" @click="remove(record)">删除</a>
+            <a href="javascript:;" @click="remove(record)" v-show="!(user === record.account)">删除</a>
           </template>
         </a-table>
 

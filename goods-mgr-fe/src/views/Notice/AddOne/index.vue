@@ -5,6 +5,8 @@
       title="添加公告"
       @ok="submit"
       @cancel="close"
+      ok-text = '确定'
+      cancel-text = '取消'
     >
 
       <a-form :label-col="{ span: 6 }">
@@ -25,5 +27,4 @@
 </script>
 
 <style scoped>
-
 </style>

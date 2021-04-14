@@ -1,7 +1,8 @@
 import { defineComponent, reactive } from 'vue'
-import { addOne } from '@/service'
+import { notice } from '@/service'
 import { result, clone } from '@/helpers/utils'
 import { message } from 'ant-design-vue'
+import store from '@/store'
 
 const defaultFormData = {
   title: '',
@@ -17,13 +18,16 @@ export default defineComponent({
     const addForm = reactive(clone(defaultFormData))
 
     const submit = async () => { 
-      const res = await addOne.addNotice(addForm.title, addForm.content)
+      const res = await notice.addNotice(addForm.title,store.state.userInfo.account, addForm.content)
 
       result(res)
         .success(({msg}) => {
           message.success(msg)
           // 置空表单
           Object.assign(addForm, defaultFormData)
+          // 触发父级getList方法
+          context.emit('getList', 1)
+          close()
         })
     }
 

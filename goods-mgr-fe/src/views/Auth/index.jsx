@@ -80,8 +80,12 @@ export default defineComponent({
       const res = await auth.register(regForm.account, regForm.password, regForm.inviteCode)
       // 处理axios返回逻辑
       result(res)
-        .success((data, response) => {
+        .success((data) => {
           message.success(data.msg)
+          // 置空表格
+          Object.keys(regForm).forEach(key => {
+            regForm[key] = ''
+          })
         })
 
     }

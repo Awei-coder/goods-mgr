@@ -12,7 +12,7 @@ export default [
   {
     title: '统计报表',
     url: '/out-input',
-    onlyAdmin: true,
+    onlyAdmin: false,
   },
   {
     title: '用户管理',
@@ -26,7 +26,7 @@ export default [
   },
   {
     title: '其它',
-    onlyAdmin: false,
+    onlyAdmin: true,
     children: [
       {
         title: '分类管理',

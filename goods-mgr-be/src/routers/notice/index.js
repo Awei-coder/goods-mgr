@@ -12,6 +12,53 @@ const router = new Router({
 
 // 获取公告
 router.get('/list', async (ctx) => {
+  const {
+    accent,
+    page = 1,
+  } = ctx.query
+
+  let {
+    size
+  } = ctx.query
+
+  size = Number(size)
+
+  // 当accent存在时表示在公告主页面
+  if (accent) {
+    const data =
+      await Notice
+        .find()
+        .sort({ _id: -1 })
+        .limit(1)
+        .exec()
+
+    ctx.body = {
+      code: 1,
+      msg: '获取成功',
+      data
+    }
+    return
+  }
+
+  // 获取公告列表
+  const list = await Notice
+    .find()
+    .sort({ _id: -1 })
+    .skip((page - 1) * size)
+    .limit(size)
+    .exec()
+
+  // 获取公告数量
+  const total = await Notice.countDocuments().exec()
+
+  ctx.response.body = {
+    code: 1,
+    msg: '获取列表成功',
+    data: {
+      list,
+      total
+    }
+  }
 
 })
 
@@ -20,9 +67,10 @@ router.post('/add', async (ctx) => {
   const {
     title,
     content,
+    promulgator,
   } = getBody(ctx)
 
-  if(title === '' || content === '') {
+  if (title === '' || content === '') {
     ctx.body = {
       code: 0,
       msg: '不能为空！'
@@ -33,6 +81,7 @@ router.post('/add', async (ctx) => {
   // 创建公告
   const notice = new Notice({
     title,
+    promulgator,
     content
   })
 
@@ -46,13 +95,57 @@ router.post('/add', async (ctx) => {
   }
 })
 
-// 删除公告
-router.delete('/:id', async (ctx) => {
+// 更新公告
+router.post('/update', async (ctx) => {
+  const {
+    _id,
+    title,
+    promulgator,
+    content,
+  } = getBody(ctx)
+
+  const one = await Notice.findOne({
+    _id
+  }).exec()
+
+  if(!one) {
+    ctx.body = {
+      code: 0,
+      msg: '公告不存在'
+    }
+    return
+  }
+
+  one.title = title
+  one.promulgator = promulgator
+  one.content = content
+  one.meta.updatedAt = new Date().getTime()
+
+  const res = await one.save()
+
+  ctx.body = {
+    code: 1,
+    msg: '修改成功',
+    data: res
+  }
 
 })
 
-// 更新公告
-router.post('/update', async (ctx) => {
+// 删除公告
+router.delete('/:id', async (ctx) => {
+  const {
+    id
+  } = ctx.params
+
+  const res = await Notice.deleteOne({
+    _id: id
+  })
+
+  ctx.body = {
+    code: 1,
+    msg: '删除成功',
+    data: res
+  }
 
 })
 

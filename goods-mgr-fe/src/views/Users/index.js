@@ -60,7 +60,6 @@ export default defineComponent({
     // 获取用户列表
     const getUsers = async () => {
       const res = await user.list(curPage.value, 10, keyword.value)
-
       result(res)
         .success(({ data: { list: resList, total: resTotol } }) => {
           list.value = resList
@@ -200,6 +199,8 @@ export default defineComponent({
       onUploadChange,
       // 添加批量添加请求头
       headers: getHeaders(),
+      // 返回用户信息 用于判断是否当前用户操作 隐藏删除按钮
+      user: store.state.userInfo.account,
     }
   }
 })

@@ -54,7 +54,7 @@ const res401 = (ctx) => {
 const checkUser = async (ctx, next) => {
   const { path } = ctx
   // 如果登陆注册的话不拦截验证
-  if (path === '/auth/login' || path === 'auth/register' || path === 'forget-password/add') {
+  if (path === '/auth/login' || path === '/auth/register' || path === '/forget-password/add') {
     await next()
     return
   }
