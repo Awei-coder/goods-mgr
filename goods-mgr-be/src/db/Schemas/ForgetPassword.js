@@ -8,7 +8,7 @@ const ForgetPasswordSchema = new mongoose.Schema({
   // 1. 待处理
   // 2. 已重置
   // 3. 已忽略
-  status: String,
+  status: Number,
 
   meta: getMeta(),
 })

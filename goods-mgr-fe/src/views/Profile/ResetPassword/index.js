@@ -2,6 +2,8 @@ import { defineComponent, reactive } from 'vue'
 import { profile } from '@/service'
 import { result } from '@/helpers/utils'
 import { message } from 'ant-design-vue'
+import { setToken } from '@/helpers/token'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
@@ -10,6 +12,8 @@ export default defineComponent({
       newPassword: '',
       confirmNewPassword: '',
     })
+
+    const router = useRouter()
 
     const resetPassword = async () => {
       const {
@@ -34,6 +38,9 @@ export default defineComponent({
           form.oldPassword = ''
           form.newPassword = ''
           form.confirmNewPassword = ''
+          // 清除token 触发重新登陆
+          setToken('')
+          router.replace('/auth')
         })
     }
 

@@ -11,20 +11,14 @@ const router = new Router({
 })
 
 router.get('/base-info', async (ctx) => {
-  const userTotal = await User.countDocuments()
+  // const userTotal = await User.countDocuments()
+  // const LogTotal = await Log.countDocuments()
   const goodTotal = await Good.countDocuments()
-  const LogTotal = await Log.countDocuments()
 
   ctx.body = {
     code: 1,
     msg: '获取成功',
-    data: {
-      total: {
-        user: userTotal,
-        good: goodTotal,
-        log: LogTotal,
-      }
-    }
+    data: goodTotal,
   }
 })
 

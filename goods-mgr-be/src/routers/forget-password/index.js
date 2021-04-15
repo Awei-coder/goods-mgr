@@ -97,7 +97,10 @@ router.post('/add', async (ctx) => {
 router.post('/update/status', async (ctx) => {
   const {
     id,
-    status,
+  } = getBody(ctx)
+
+  let {
+    status
   } = getBody(ctx)
 
   const one = await ForgetPassword.findOne({
@@ -112,15 +115,19 @@ router.post('/update/status', async (ctx) => {
     return
   }
 
+  status = Number(status)
+
   // 把该条记录修改成传进来的status, 有可能是已处理2和忽略3
   one.status = status
 
   // 如果是要重置的话, 就是重置这个用户的密码
   // 2重置密码
   if(one.status === 2) {
-    const user = User.findOne({
+
+    const user = await User.findOne({
       account: one.account
     })
+
     // 如果用户存在, 则重置密码
     if(user) {
       user.password = config.DEFAULT_PASSWORD

@@ -23,7 +23,7 @@ export default createStore({
     },
     setGoodClassify(state, setGoodClassify) {
       state.goodClassifyList = setGoodClassify
-    }
+    },
   },
   actions: {
     // 获取分类信息
@@ -58,7 +58,8 @@ export default createStore({
           context.commit('setUserCharacter', getCharacterInfoById(data.character))
 
         })
-    }
+    },
+
   },
 
 });

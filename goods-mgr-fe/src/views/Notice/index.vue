@@ -11,7 +11,7 @@
         >编辑</a-button
       > -->
       <a-card id="main">
-        <flex-end>
+        <flex-end v-if="!simple">
           <a-button type="primary" @click="show = true">添加</a-button>
           <a-button style="margin-left:12px;" @click="toNoticeList">往期公告</a-button>
         </flex-end>

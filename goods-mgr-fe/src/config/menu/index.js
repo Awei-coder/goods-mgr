@@ -2,7 +2,7 @@ export default [
   {
     title: '总览',
     url: '/dashboard',
-    onlyAdmin: true,
+    onlyAdmin: false,
   },
   {
     title: '商品管理',

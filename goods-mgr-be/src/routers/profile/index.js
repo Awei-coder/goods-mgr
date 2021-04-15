@@ -45,7 +45,7 @@ router.post('/update/password', async (ctx) => {
 
   ctx.body = {
     code: 1,
-    msg: '修改成功'
+    msg: '修改成功，请重新登陆！'
   }
 
 })

@@ -9,7 +9,10 @@ export default defineComponent({
   components: {
     AddOne,
   },
-  setup() {
+  props: {
+    simple: Boolean,
+  },
+  setup(props) {
 
     const noticeForm = reactive({
       title: '',
@@ -62,6 +65,7 @@ export default defineComponent({
       noticeForm,
       getList,
       toNoticeList,
+      simple: props.simple
     }
   }
 })

@@ -123,7 +123,7 @@ export default defineComponent({
           store.commit('setUserCharacter', getCharacterInfoById(user.character))
 
           // 进入页面
-          router.replace('/goods')
+          router.replace('/dashboard')
 
         })
       // 这里类似传过去一个函数 然后在那边(data,response){message.success(data.msg)} (data, response) 传回来调用了

@@ -1,24 +1,27 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { dashboard } from '@/service'
 import { result } from '@/helpers/utils'
-import Good from '@/views/Goods/index.vue'
-import Log from '@/views/Log/index.vue'
+import store from '@/store'
+import Notice from '@/views/Notice/index.vue'
+import DaySaleValue from '@/views/OutInput/DaySaleValue/index.vue'
+import DayStoreValue from '@/views/OutInput/DayStoreValue/index.vue'
 
 export default defineComponent({
   components: {
-    Good,
-    Log,
+    Notice,
+    DaySaleValue,
+    DayStoreValue,
   },
   setup() {
     const loading = ref(true)
 
     const baseInfo = ref({
-      total: {
-        good: 0,
-        user: 0,
-        log: 0,
-      }
+      good: 0,
+      toDayValueData: 0,
+      toDayOutStock: 0,
     })
+
+    
 
     const getBaseInfo = async () => {
       loading.value = true
@@ -26,9 +29,19 @@ export default defineComponent({
       loading.value = false
 
       result(res)
-        .success(({data}) => {
-          baseInfo.value = data
+        .success(({ data }) => {
+          baseInfo.value.good = data
         })
+    }
+
+    // 获得子组件传过来的值
+    const getSaleDayValueData = (value) => {
+      baseInfo.value.toDayValueData = value[4]
+    }
+
+    // 获得子组件传过来的值
+    const getOutStock = (value) => {
+      baseInfo.value.toDayOutStock = value[5]
     }
 
     onMounted(() => {
@@ -38,8 +51,8 @@ export default defineComponent({
     return {
       baseInfo,
       loading,
-      Good,
-      Log,
+      getSaleDayValueData,
+      getOutStock,
     }
   }
 })

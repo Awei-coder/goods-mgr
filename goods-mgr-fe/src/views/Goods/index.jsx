@@ -152,13 +152,8 @@ export default defineComponent({
             .success(({ msg }) => {
               message.success(msg)
               // 向服务端发送请求更新数据的方法
-              // getList()
+              getList()
 
-              // 直接在前端更新数据的方法 减少http请求,减轻服务端压力
-              const idx = list.value.findIndex(item => {
-                return item._id === id
-              })
-              list.value.splice(idx, 1)
             })
         }
       })

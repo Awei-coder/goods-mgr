@@ -6,7 +6,7 @@
         src="@/assets/logo.jpeg"
         alt=""
       />
-      <h2 class="title">商品库存管理系统 后台</h2>
+      <h2 class="title">商品库存管理系统</h2>
     </div>
     <form action="">
       <div class="form">

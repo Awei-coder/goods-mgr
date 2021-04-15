@@ -8,6 +8,7 @@ const config = require('../../project.config')
 // 获取user表
 const User = mongoose.model('User')
 const InviteCode = mongoose.model('InviteCode')
+const character = mongoose.model('Character')
 
 // 创建路由
 const router = new Router({
@@ -62,10 +63,16 @@ router.post('/register', async (ctx) => {
     return
   }
 
-  // 注册用户
+  // 注册用户 -> 默认为普通用户
+  // 获取用户角色的id
+  const normal = await character.findOne({
+    title: '成员'
+  }).exec()
+
   const user = new User({
     account,
-    password
+    password,
+    character: normal._id,
   })
 
   // 保存用户插入表 同步到mongodb

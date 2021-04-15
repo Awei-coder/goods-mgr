@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- loading效果 -->
-    <a-spin :spinning="loading">
+    <a-spin :spinning="loading" v-only-admin>
       <a-card
         :title="simple ? '最近操作记录' : ''"
       >

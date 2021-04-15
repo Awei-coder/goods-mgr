@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 import store from '@/store'
 import { user } from '@/service'
 import { message } from 'ant-design-vue'
@@ -83,7 +83,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   // 注册路由
   routes,
 });
@@ -139,7 +139,7 @@ router.beforeEach(async (to, from, next) => {
 
   // 如果走到这便是已经登陆就不让进入auth页面了
   if(to.path === '/auth') {
-    next('/goods')
+    next('/dashboard')
     return
   }
 

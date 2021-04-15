@@ -4,32 +4,36 @@
       <a-card>
         <div class="list">
           <div class="item">
-            <div class="count">共 {{ baseInfo.total.good }} 种</div>
+            <div class="count">共 {{ baseInfo.good }} 种</div>
             <div class="title">商品</div>
           </div>
           <div class="item">
-            <div class="count">共 {{ baseInfo.total.user }} 位</div>
-            <div class="title">用户</div>
+            <div class="count">共 {{ baseInfo.toDayValueData }} 元</div>
+            <div class="title">今日销售额</div>
           </div>
           <div class="item">
-            <div class="count">共 {{ baseInfo.total.log }} 条</div>
-            <div class="title">日志{{ simple }}</div>
+            <div class="count">共 {{ baseInfo.toDayOutStock }} 件</div>
+            <div class="title">今日出库量</div>
           </div>
         </div>
       </a-card>
     </a-spin>
 
+    <div class="notice">
+      <notice simple />
+    </div>
+
     <div class="table-list">
       <div class="left">
-        <good
-          simple
-         />
+        <a-card>
+          <day-sale-value simple @getSaleDayValueData="getSaleDayValueData"/>
+        </a-card>
       </div>
 
       <div class="right">
-        <log 
-        simple
-        />
+        <a-card>
+          <day-store-value simple @getOutStock="getOutStock"/>
+        </a-card>
       </div>
     </div>
   </div>
