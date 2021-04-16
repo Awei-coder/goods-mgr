@@ -48,15 +48,12 @@ export const getTime = (saleValueDate) => {
 export const getSaleDayValueOption = (saleDatValueDate, total) => {
   return {
     title: {
-      text: '销量数据'
+      text: '销售额数据'
     },
     tooltip: {},
     toolbox: {
       show: true,
       feature: {
-        dataZoom: {
-          yAxisIndex: 'none'
-        },
         dataView: { readOnly: false },
         magicType: { type: ['line', 'bar'] },
         restore: {},
@@ -72,7 +69,7 @@ export const getSaleDayValueOption = (saleDatValueDate, total) => {
     yAxis: {},
     series: [{
       name: '销售额',
-      type: 'line',
+      type: 'bar',
       data: total,
       itemStyle: {
         normal: {
@@ -106,9 +103,6 @@ export const getSaleValueOption = (saleValueDate, inStock, outStock) => {
     toolbox: {
       show: true,
       feature: {
-        dataZoom: {
-          yAxisIndex: 'none'
-        },
         dataView: { readOnly: false },
         magicType: { type: ['line', 'bar'] },
         restore: {},
@@ -176,9 +170,6 @@ export const getStoreOption = (goodClassifyTitle, total) => {
     toolbox: {
       show: true,
       feature: {
-        dataZoom: {
-          yAxisIndex: 'none'
-        },
         dataView: { readOnly: false },
         magicType: { type: ['line', 'bar'] },
         restore: {},

@@ -11,6 +11,7 @@ require('./Schemas/LogResponse')
 require('./Schemas/ForgetPassword')
 require('./Schemas/GoodClassify')
 require('./Schemas/Notice')
+require('./Schemas/Demand')
 
 // 给哪个数据库
 // 哪个集合

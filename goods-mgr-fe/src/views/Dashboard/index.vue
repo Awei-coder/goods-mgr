@@ -15,24 +15,28 @@
             <div class="count">共 {{ baseInfo.toDayOutStock }} 件</div>
             <div class="title">今日出库量</div>
           </div>
+          <div class="item" id="notice">
+            <a-popover title="最新公告" placement="right" >
+              <template #content >
+                <notice class="notice" simple />
+              </template>
+              <a-button type="primary" @click="goNotice">查看最新公告</a-button>
+            </a-popover>
+          </div>
         </div>
       </a-card>
     </a-spin>
 
-    <div class="notice">
-      <notice simple />
-    </div>
-
     <div class="table-list">
       <div class="left">
         <a-card>
-          <day-sale-value simple @getSaleDayValueData="getSaleDayValueData"/>
+          <day-sale-value simple @getSaleDayValueData="getSaleDayValueData" />
         </a-card>
       </div>
 
       <div class="right">
         <a-card>
-          <day-store-value simple @getOutStock="getOutStock"/>
+          <day-store-value simple @getOutStock="getOutStock" />
         </a-card>
       </div>
     </div>

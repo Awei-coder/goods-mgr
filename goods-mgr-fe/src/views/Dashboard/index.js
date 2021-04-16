@@ -1,7 +1,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { dashboard } from '@/service'
 import { result } from '@/helpers/utils'
-import store from '@/store'
+import { useRouter } from 'vue-router'
 import Notice from '@/views/Notice/index.vue'
 import DaySaleValue from '@/views/OutInput/DaySaleValue/index.vue'
 import DayStoreValue from '@/views/OutInput/DayStoreValue/index.vue'
@@ -21,7 +21,7 @@ export default defineComponent({
       toDayOutStock: 0,
     })
 
-    
+    const router = useRouter()
 
     const getBaseInfo = async () => {
       loading.value = true
@@ -44,6 +44,11 @@ export default defineComponent({
       baseInfo.value.toDayOutStock = value[5]
     }
 
+    // 前往公告
+    const goNotice = () => {
+      router.push('/notice/list')
+    }
+
     onMounted(() => {
       getBaseInfo()
     })
@@ -53,6 +58,7 @@ export default defineComponent({
       loading,
       getSaleDayValueData,
       getOutStock,
+      goNotice,
     }
   }
 })

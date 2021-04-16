@@ -17,7 +17,6 @@
             :columns="columns"
             :data-source="list"
             :pagination="false"
-            :scroll="{ x: 'max-content' }"
           >
             <template #createdAt="{ record }">
               {{ formatTimeStamp(record.meta.createdAt) }}

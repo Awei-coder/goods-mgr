@@ -88,7 +88,8 @@ export default defineComponent({
           totalNums += (value.num * value.price)
         })
 
-        saleDayValueData.push(totalNums)
+        // 保留两位小数
+        saleDayValueData.push(totalNums.toFixed(2))
       })
 
 
@@ -100,7 +101,6 @@ export default defineComponent({
 
       // vuex 保存每日销售额
       if(props.simple) {
-        // store.dispatch('getSaleDayValueData', saleDayValueData)
         context.emit('getSaleDayValueData', saleDayValueData)
       }
 

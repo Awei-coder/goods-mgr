@@ -42,7 +42,12 @@
     </a-card>
 
     <!-- 详情框 -->
-    <a-modal v-model:visible="showDetail" title="查看公告详情" :footer="null">
+    <a-modal
+      v-model:visible="showDetail"
+      title="查看公告详情"
+      :footer="null"
+      width="1165px"
+    >
       <h2 style="text-align: center; font-weight: 700">{{ curData.title }}</h2>
       <p style="color: #666; margin: 24px 0">
         <space-between>
@@ -62,10 +67,14 @@
       @ok="updateNotice"
       ok-text="确认"
       cancel-text="取消"
+      width="1165px"
     >
       <a-form :label-col="{ span: 6 }">
         <a-form-item label="标题">
-          <a-input v-model:value="editForm.title" style="width: 300px" />
+          <a-input
+            v-model:value="editForm.title"
+            style="width: 600px"
+          />
         </a-form-item>
 
         <a-form-item label="正文内容">
@@ -74,7 +83,8 @@
             placeholder="请输入正文内容..."
             allow-clear
             :rows="6"
-            style="width: 300px"
+            style="width: 600px"
+            :auto-size="{ minRows: 2, maxRows: 20 }"
           />
         </a-form-item>
       </a-form>

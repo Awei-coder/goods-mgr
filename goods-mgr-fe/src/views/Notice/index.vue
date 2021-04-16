@@ -1,15 +1,5 @@
 <template>
   <div>
-    <a-card>
-      <!-- title="公告"
-      :headStyle="{
-        'text-align': 'center',
-        'font-weight': '700',
-        'font-size': '24px',
-      }" -->
-      <!-- <a-button type="primary" @click="showUpdateModal = true" id="update"
-        >编辑</a-button
-      > -->
       <a-card id="main">
         <flex-end v-if="!simple">
           <a-button type="primary" @click="show = true">添加</a-button>
@@ -30,7 +20,6 @@
       <!-- 添加一条公告功能, 子传父通过子传过来的值修改父的值 -->
       <add-one v-model:show="show" @getList="getList"></add-one>
 
-    </a-card>
   </div>
 </template>
 

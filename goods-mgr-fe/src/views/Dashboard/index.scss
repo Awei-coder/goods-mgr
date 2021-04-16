@@ -1,8 +1,9 @@
 .list {
   display: flex;
+  align-items: center;
 
   .item {
-    flex: 1;
+    flex: 2;
 
     .title {
       color: #666;
@@ -14,23 +15,27 @@
       color: black;
     }
   }
-}
 
-.notice {
-  margin-top: 24px;
+  #notice {
+    flex: 1;
+    align-self: flex-end;
+    .notice {
+      width: 1230px;
+    }
+  }
 }
 
 .table-list {
-  margin-top: 24px;
   display: flex;
+  margin-top: 12px;
 
   .left {
     flex: 1;
-    margin-right: 12px;
+    margin-right: 6px;
   }
 
   .right {
     flex: 1;
-    margin-left: 12px;
+    margin-left: 6px;
   }
 }

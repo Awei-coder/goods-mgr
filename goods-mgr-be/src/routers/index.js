@@ -11,6 +11,7 @@ const profile = require('./profile')
 const dashboard = require('./dashboard')
 const upload = require('./upload')
 const notice = require('./notice')
+const demand = require('./demand')
 
 module.exports = (app) => {
   // 注册登陆注册路由
@@ -39,4 +40,6 @@ module.exports = (app) => {
   app.use(upload.routes())
   // 公告路由
   app.use(notice.routes())
+  // 需求路由
+  app.use(demand.routes())
 }
