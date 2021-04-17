@@ -78,6 +78,11 @@ const routes = [
         name: 'NoticeList',
         component: () => import(/* webpackChunkName: "NoticeList" */ '../views/NoticeList/index.vue')
       },
+      {
+        path: 'demand',
+        name: 'Demand',
+        component: () => import(/* webpackChunkName: "Demand" */ '../views/Demand/index.vue')
+      },
     ]
   },
 ];

@@ -3,6 +3,7 @@ import menu from '@/config/menu'
 import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
+
   setup() {
     const router = useRouter()
     const route = useRoute()
@@ -15,7 +16,7 @@ export default defineComponent({
 
       menu.forEach(item => {
         (item.children || []).forEach(child => {
-          if(child.url === route.path) {
+          if (child.url === route.path) {
             openKeys.value.push(item.title)
           }
         })

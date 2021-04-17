@@ -56,7 +56,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      // 获取列表
+      // 获取列表 1 -> 表示只获取最新一条
       getList(1)
     })
 

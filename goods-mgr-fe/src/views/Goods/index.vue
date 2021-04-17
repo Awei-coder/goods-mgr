@@ -44,11 +44,10 @@
         :data-source="list"
         :pagination="false"
         bordered
-        :scroll="{ x: 'max-content' }"
       >
         <template #manufactureDate="data">
           <!-- 格式化出厂日期 -->
-          {{ formatTimeStamp(data.record.manufactureDate) }}
+          {{ formatTimeStamp(data.record.manufactureDate, 1) }}
         </template>
 
         <!-- 操作按钮 -->

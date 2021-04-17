@@ -9,12 +9,28 @@ const DemandSchema = new mongoose.Schema({
   // 内容
   content: String,
   // 用户备注
-  userAttach: String,
-  // 处理状态
-  status: Number,
+  userAttach: {
+    type: String,
+    default: '空'
+  },
+  // 处理状态 1 -> 未处理 2 -> 已经处理 3 -> 已忽略
+  status: {
+    type: Number,
+    default: 1
+  },
   // 处理人
-  handler: String,
-  adminAttach: String,
+  handler: {
+    type: String,
+    default: ''
+  },
+  adminAttach: {
+    type: String,
+    default: '空'
+  },
+  solveTime: {
+    type: Number,
+    default: Date.now(),
+  },
   meta: getMeta(),
 })
 

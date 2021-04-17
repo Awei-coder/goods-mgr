@@ -32,7 +32,7 @@
         <div class="items">
           <div class="item">
             <div class="title">出厂日期</div>
-            <div class="content">{{ formatTimeStamp(d.manufactureDate) }}</div>
+            <div class="content">{{ formatTimeStamp(d.manufactureDate, 1) }}</div>
           </div>
         </div>
       </div>

@@ -3,8 +3,12 @@ import { notice } from '@/service'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import store from '@/store'
 import { message, Modal } from 'ant-design-vue'
+import AddOne from '@/views/Notice/AddOne/index.vue'
 
 export default defineComponent({
+  components: {
+    AddOne
+  },
   setup() {
 
     // 定义变量
@@ -30,6 +34,9 @@ export default defineComponent({
         }
       },
     ]
+
+    // 显示隐藏添加公告表单变量
+    const show = ref(false)
 
     const list = ref([])
     const total = ref(0)
@@ -159,6 +166,8 @@ export default defineComponent({
       updateNotice,
       editForm,
       remove,
+      show,
+      getList,
     }
   }
 })

@@ -36,8 +36,8 @@ export const result = (response, authShowErroMsg = true) => {
   }
 }
 
+// 实现深拷贝
 export const clone = (obj) => {
-  // 实现深拷贝
   return JSON.parse(JSON.stringify(obj))
 }
 // 处理时间, 9:9:12 -> 09:09:12
@@ -48,7 +48,7 @@ const tsPadStart = (str) => {
 }
 
 // 格式化出厂时间
-export const formatTimeStamp = (ts) => {
+export const formatTimeStamp = (ts, flag) => {
   const date = new Date(Number(ts))
   const YYYY = date.getFullYear()
   const MM = tsPadStart(date.getMonth() + 1)
@@ -56,6 +56,11 @@ export const formatTimeStamp = (ts) => {
   const hh = tsPadStart(date.getHours())
   const mm = tsPadStart(date.getMinutes())
   const ss = tsPadStart(date.getSeconds())
+
+  // 如果flag存在就不返回时分秒
+  if(flag) {
+    return `${YYYY}/${MM}/${DD}`
+  }
 
   return `${YYYY}/${MM}/${DD} ${hh}:${mm}:${ss}`
 }

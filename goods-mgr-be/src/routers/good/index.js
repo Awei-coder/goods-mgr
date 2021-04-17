@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const { getBody } = require('../../helpers/utils')
 const config = require('../../project.config')
 const { loadExcel, getFirstSheet } = require('../../helpers/excel')
+const { verify, getToken } = require('../../helpers/token')
 
 // 出库入库常量
 const GOOD_COUST = {
@@ -178,11 +179,15 @@ router.post('/update/count', async (ctx) => {
 
   const res = await good.save()
 
+  // 获取操作者
+  const { account } = await verify(getToken(ctx))
+
   // 更新出入库记录
   const log = new InventoryLog({
     type,
     num: Math.abs(num),
     goodName: id,
+    user: account,
   })
 
   log.save()

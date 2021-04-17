@@ -5,13 +5,18 @@ export default [
     onlyAdmin: false,
   },
   {
+    title: '统计报表',
+    url: '/out-input',
+    onlyAdmin: false,
+  },
+  {
     title: '商品管理',
     url: '/goods',
     onlyAdmin: false,
   },
   {
-    title: '统计报表',
-    url: '/out-input',
+    title: '需求管理',
+    url: '/demand',
     onlyAdmin: false,
   },
   {

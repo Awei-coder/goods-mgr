@@ -39,6 +39,10 @@ export default defineComponent({
     // 进出库显示数据
     const columns = [
       {
+        title: '操作者',
+        dataIndex: 'user'
+      },
+      {
         title: '数量',
         dataIndex: 'num',
       },

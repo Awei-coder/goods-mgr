@@ -5,7 +5,10 @@ const InventoryLogSchema = new mongoose.Schema({
   type: String,
   num: Number,
   goodName: String,
-  user: String,
+  user: {
+    type: String,
+    default: '神秘人'
+  },
 
   meta: getMeta(),
 })

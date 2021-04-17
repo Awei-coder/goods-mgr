@@ -9,17 +9,17 @@
       key="item.url"
       v-only-admin="item.onlyAdmin"
     >
-      <a-sub-menu
-       v-if="item.children"
-       :key="item.title"
-       >
+      <a-sub-menu v-if="item.children" :key="item.title">
         <template #title>
           <span>
-            <MailOutlined />
             <span>{{ item.title }}</span>
           </span>
         </template>
-        <a-menu-item v-for="(child) in item.children" :key="child.url" @click="to(child.url)">
+        <a-menu-item
+          v-for="child in item.children"
+          :key="child.url"
+          @click="to(child.url)"
+        >
           {{ child.title }}
         </a-menu-item>
       </a-sub-menu>

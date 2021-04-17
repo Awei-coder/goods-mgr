@@ -1,13 +1,14 @@
 <template>
   <div>
-    <a-card
-      title="公告列表"
-      :headStyle="{
-        'text-align': 'center',
-        'font-weight': '700',
-        'font-size': '24px',
-      }"
-    >
+    <a-card>
+      <div class="header">
+        <space-between>
+          <h2>公告列表</h2>
+          <a-button type="primary" @click="show = true">添加公告</a-button>
+        </space-between>
+      </div>
+
+      <a-divider></a-divider>
       <div>
         <a-table
           bordered
@@ -71,10 +72,7 @@
     >
       <a-form :label-col="{ span: 6 }">
         <a-form-item label="标题">
-          <a-input
-            v-model:value="editForm.title"
-            style="width: 600px"
-          />
+          <a-input v-model:value="editForm.title" style="width: 600px" />
         </a-form-item>
 
         <a-form-item label="正文内容">
@@ -89,6 +87,8 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <add-one v-model:show="show" @getList="getList"></add-one>
   </div>
 </template>
 

@@ -23,3 +23,5 @@ export * as profile from './profile'
 export * as dashboard from './dashboard'
 
 export * as notice from './Notice'
+
+export * as demand from './demand'

@@ -17,11 +17,11 @@ export default defineComponent({
   setup(props, context) {
     const addForm = reactive(clone(defaultFormData))
 
-    const submit = async () => { 
-      const res = await notice.addNotice(addForm.title,store.state.userInfo.account, addForm.content)
+    const submit = async () => {
+      const res = await notice.addNotice(addForm.title, store.state.userInfo.account, addForm.content)
 
       result(res)
-        .success(({msg}) => {
+        .success(({ msg }) => {
           message.success(msg)
           // 置空表单
           Object.assign(addForm, defaultFormData)
