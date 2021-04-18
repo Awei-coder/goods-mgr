@@ -1,4 +1,4 @@
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { UserOutlined, LockOutlined, MessageOutlined } from '@ant-design/icons-vue'
 import { auth, resetPassword } from '@/service'
 import { message, Modal, Input } from 'ant-design-vue';
@@ -8,13 +8,15 @@ import store from '@/store'
 import { getCharacterInfoById } from '@/helpers/character'
 import { useRouter } from 'vue-router'
 import { setToken } from '@/helpers/token'
+import JcRange from "@/views/Auth/SliderCheck/index.vue";
 
 export default defineComponent({
   components: {
     // 图标组件注册
     UserOutlined,
     LockOutlined,
-    MessageOutlined
+    MessageOutlined,
+    JcRange,
   },
   setup() {
 
@@ -27,6 +29,9 @@ export default defineComponent({
       password: '',
       inviteCode: ''
     })
+
+    // 滑动验证参数
+    const sliderCode = ref(false)
 
     // 忘记密码功能
     const forgetPassword = () => {
@@ -103,6 +108,12 @@ export default defineComponent({
         return
       }
 
+      // 如果用户没进行滑动验证
+      if(!sliderCode.value) {
+        message.error('请先进行人机验证操作！')
+        return
+      }
+
       // 发送axios请求  返回的res是一个response对象
       const res = await auth.login(loginForm.account, loginForm.password)
       // 处理axios返回逻辑
@@ -130,6 +141,16 @@ export default defineComponent({
 
     }
 
+    // 滑动验证成功函数
+    const onMpanelSuccess = () =>{
+      sliderCode.value = true
+    }
+
+    // 滑动验证失败函数
+    const onMpanelError = () =>{
+      sliderCode.value = false
+    }
+
     return {
       // 注册数据和方法
       regForm,
@@ -141,6 +162,9 @@ export default defineComponent({
 
       // 忘记密码
       forgetPassword,
+      onMpanelSuccess,
+      onMpanelError,
+      sliderCode,
     }
   },
 });

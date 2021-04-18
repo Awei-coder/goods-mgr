@@ -2,76 +2,96 @@
   <div class="auth">
     <div class="bg"></div>
     <div class="title-info">
-      <img
-        src="@/assets/logo.jpeg"
-        alt=""
-      />
+      <img src="@/assets/logo.jpeg" alt="" />
       <h2 class="title">商品库存管理系统</h2>
     </div>
     <form action="">
       <div class="form">
-      <a-tabs>
-        <a-tab-pane key="1" tab="登陆">
-          <div class="item">
-            <a-input size="large" placeholder="账户" v-model:value="loginForm.account">
-              <template #prefix>
-                <UserOutlined />
-              </template>
-            </a-input>
-          </div>
+        <a-tabs>
+          <a-tab-pane key="1" tab="登陆">
+            <div class="item">
+              <a-input
+                size="large"
+                placeholder="账户"
+                v-model:value="loginForm.account"
+              >
+                <template #prefix>
+                  <UserOutlined />
+                </template>
+              </a-input>
+            </div>
 
-          <div class="item">
-            <a-input-password size="large" placeholder="密码" v-model:value="loginForm.password" >
-              <template #prefix>
-                <LockOutlined />
-              </template>
-            </a-input-password>
-          </div>
+            <div class="item">
+              <a-input-password
+                size="large"
+                placeholder="密码"
+                v-model:value="loginForm.password"
+              >
+                <template #prefix>
+                  <LockOutlined />
+                </template>
+              </a-input-password>
+            </div>
 
-          <div class="item">
-            <a href="javascript:;" @click="forgetPassword">忘记密码</a>
-          </div>
+            <div class="item">
+              <a href="javascript:;" @click="forgetPassword">忘记密码</a>
+            </div>
+            <jc-range
+              :successFun="onMpanelSuccess"
+              :errorFun="onMpanelError"
+            ></jc-range>
+            <div class="item" style="margin-top:12px;">
+              <a-button size="large" type="primary" @click="login"
+                >登陆</a-button
+              >
+            </div>
+          </a-tab-pane>
 
-          <div class="item">
-            <a-button 
-            size="large"
-             type="primary"
-            @click="login"
-            >登陆</a-button>
-          </div>
-        </a-tab-pane>
+          <a-tab-pane key="2" tab="注册">
+            <div class="item">
+              <a-input
+                size="large"
+                v-model:value="regForm.account"
+                placeholder="用户名"
+              >
+                <template #prefix>
+                  <UserOutlined />
+                </template>
+              </a-input>
+            </div>
 
-        <a-tab-pane key="2" tab="注册">
-          <div class="item">
-            <a-input size="large" v-model:value="regForm.account" placeholder="用户名">
-              <template #prefix>
-                <UserOutlined />
-              </template>
-            </a-input>
-          </div>
+            <div class="item">
+              <a-input-password
+                size="large"
+                v-model:value="regForm.password"
+                placeholder="密码"
+              >
+                <template #prefix>
+                  <LockOutlined />
+                </template>
+              </a-input-password>
+            </div>
 
-          <div class="item">
-            <a-input-password size="large" v-model:value="regForm.password" placeholder="密码" >
-              <template #prefix>
-                <LockOutlined />
-              </template>
-            </a-input-password>
-          </div>
+            <div class="item">
+              <a-input
+                size="large"
+                placeholder="邀请码"
+                v-model:value="regForm.inviteCode"
+              >
+                <template #prefix>
+                  <MessageOutlined />
+                </template>
+              </a-input>
+            </div>
 
-          <div class="item">
-            <a-input size="large" placeholder="邀请码" v-model:value="regForm.inviteCode" >
-              <template #prefix>
-                <MessageOutlined />
-              </template>
-            </a-input>
-          </div>
-
-          <div class="item">
-            <a-button size="large" @click="register" type="primary">注册</a-button>
-          </div>
-        </a-tab-pane>
-      </a-tabs>
-    </div>
+            <div class="item">
+              <a-button size="large" @click="register" type="primary"
+                >注册</a-button
+              >
+            </div>
+          </a-tab-pane>
+        </a-tabs>
+      </div>
     </form>
   </div>
 </template>
