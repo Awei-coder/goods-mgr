@@ -229,6 +229,10 @@ export default defineComponent({
               }
 
               message.success(`成功${word} ${Math.abs(num)} 库存`)
+              // 如果库存为0, 需要刷新下列表, 隐藏库存为0的商品
+              if(one.count === 0) {
+                getList()
+              }
             })
         }
       })

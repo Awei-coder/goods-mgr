@@ -40,7 +40,7 @@
               :successFun="onMpanelSuccess"
               :errorFun="onMpanelError"
             ></jc-range>
-            <div class="item" style="margin-top:12px;">
+            <div class="item" style="margin-top: 12px">
               <a-button size="large" type="primary" @click="login"
                 >登陆</a-button
               >
@@ -83,8 +83,11 @@
                 </template>
               </a-input>
             </div>
-
-            <div class="item">
+            <jc-range
+              :successFun="onRegisSuccess"
+              :errorFun="onRegisError"
+            ></jc-range>
+            <div class="item" style="margin-top: 12px;">
               <a-button size="large" @click="register" type="primary"
                 >注册</a-button
               >

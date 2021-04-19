@@ -6,18 +6,7 @@
       @ok="submit"
       @cancel="close"
     >
-      <!-- // 商品名
-        name: String,
-        // 价格
-        price: Number,
-        // 制造商
-        manufacturer: String,
-        // 出厂日期
-        manufactureDate: String,
-        // 分类
-        classify: String,-->
-
-      <a-form :label-col="{ span: 6 }">
+      <a-form :model="addForm" :label-col="{ span: 6 }">
         <a-form-item label="商品名">
           <a-input v-model:value="addForm.name" />
         </a-form-item>
@@ -34,21 +23,19 @@
           <a-input v-model:value="addForm.manufacturer" />
         </a-form-item>
 
-        <a-form-item label="出产日期">
-          <a-date-picker v-model:value="addForm.manufactureDate" />
+        <a-form-item label="出厂日期">
+          <a-date-picker placeholder="请选择出厂日期" v-model:value="addForm.manufactureDate" />
         </a-form-item>
 
         <a-form-item label="分类">
-          <a-select
-            v-model:value="addForm.classify"
-            style="width: 120px"
-          >
-          <!-- 把分类的id传给商品数据库 -->
+          <a-select v-model:value="addForm.classify" style="width: 120px">
+            <!-- 把分类的id传给商品数据库 -->
             <a-select-option
-            v-for="item in store.goodClassifyList"
-            :value="item._id"
-            :key="item._id"
-            >{{item.title}}</a-select-option>
+              v-for="item in store.goodClassifyList"
+              :value="item._id"
+              :key="item._id"
+              >{{ item.title }}</a-select-option
+            >
           </a-select>
         </a-form-item>
 

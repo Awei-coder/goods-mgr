@@ -31,12 +31,15 @@ export default defineComponent({
     })
 
     // 滑动验证参数
-    const sliderCode = ref(false)
+    const sliderLoginCode = ref(false)
+    const sliderRegisCode = ref(false)
 
     // 忘记密码功能
     const forgetPassword = () => {
       Modal.confirm({
         title: `请输入账号，提交给管理员审核`,
+        okText: '确定',
+        cancelText: '取消',
         content: (
           <div>
             <Input class="__forget_password_account" />
@@ -51,7 +54,7 @@ export default defineComponent({
           const res = await resetPassword.add(account)
 
           result(res)
-            .success(({msg}) => {
+            .success(({ msg }) => {
               message.success(msg)
             })
         }
@@ -82,6 +85,12 @@ export default defineComponent({
         return
       }
 
+      // 如果用户没进行滑动验证
+      if (!sliderRegisCode.value) {
+        message.warning('请先进行人机验证操作！')
+        return
+      }
+
       const res = await auth.register(regForm.account, regForm.password, regForm.inviteCode)
       // 处理axios返回逻辑
       result(res)
@@ -109,8 +118,8 @@ export default defineComponent({
       }
 
       // 如果用户没进行滑动验证
-      if(!sliderCode.value) {
-        message.error('请先进行人机验证操作！')
+      if (!sliderLoginCode.value) {
+        message.warning('请先进行人机验证操作！')
         return
       }
 
@@ -123,7 +132,7 @@ export default defineComponent({
 
           // 设置token
           setToken(token)
-          
+
           // 获取角色列表
           await store.dispatch('getCharacterInfo')
 
@@ -141,15 +150,30 @@ export default defineComponent({
 
     }
 
-    // 滑动验证成功函数
-    const onMpanelSuccess = () =>{
-      sliderCode.value = true
+    // 滑动登陆验证成功函数
+    const onMpanelSuccess = () => {
+      sliderLoginCode.value = true
+      // }else {
+      //   sliderRegisCode.value = true
+      // }
     }
 
-    // 滑动验证失败函数
-    const onMpanelError = () =>{
-      sliderCode.value = false
+    // 滑动登陆验证失败函数
+    const onMpanelError = () => {
+      sliderLoginCode.value = false
     }
+
+    // 滑动注册验证成功函数
+    const onRegisSuccess = () => {
+      sliderRegisCode.value = true
+    }
+
+    // 滑动注册验证失败函数
+    const onRegisError = () => {
+      sliderRegisCode.value = false
+    }
+
+
 
     return {
       // 注册数据和方法
@@ -164,7 +188,10 @@ export default defineComponent({
       forgetPassword,
       onMpanelSuccess,
       onMpanelError,
-      sliderCode,
+      sliderLoginCode,
+      sliderRegisCode,
+      onRegisSuccess,
+      onRegisError,
     }
   },
 });

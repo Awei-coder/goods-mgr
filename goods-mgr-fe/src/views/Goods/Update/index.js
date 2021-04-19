@@ -38,11 +38,15 @@ export default defineComponent({
         classify: editForm.classify,
       })
       result(res)
-        .success(({data, msg}) => {
+        .success(({data: {newOne, oldOne}, msg}) => {
           message.success(msg)
           // 向父组件发送更新数据操作
           // Object.assign(props.good, data)
-          context.emit('update', data)
+          context.emit('update', newOne)
+          // 如果修改了时间, 就更新下列表
+          if(oldOne) {
+            context.emit('getList')
+          }
           close();
         })
     }

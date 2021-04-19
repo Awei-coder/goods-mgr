@@ -94,6 +94,7 @@
         v-model:show="showUpdateModal"
         :good="curEditGood"
         @update="updateGood"
+        @getList="getList"
       />
     </a-card>
   </div>

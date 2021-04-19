@@ -71,3 +71,18 @@ export const uniqueArr = (arr) => {
 
   return [...set]
 }
+
+// 判断输入是否为小数
+export const isFloat = (num) => {
+  const x = String(num)
+  
+  // 如果找不到返回-1
+  let index = x.indexOf('.') + 1
+
+  // 如果>0证明是小数
+  if(index > 0) {
+    return true
+  }
+  return false
+  
+}

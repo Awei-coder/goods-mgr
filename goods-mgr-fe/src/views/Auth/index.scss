@@ -5,8 +5,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg") center 110px no-repeat;
+  // https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg
+  background: url("../../assets/bgc2.jpg") center no-repeat;
   background-size: 100%;
+  z-index: -1;
 }
 
 .auth {

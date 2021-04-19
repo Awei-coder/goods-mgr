@@ -1,6 +1,6 @@
 const Router = require('@koa/router')
 const mongoose = require('mongoose')
-const { getBody } = require('../../helpers/utils')
+const { getBody, getSimpleTime } = require('../../helpers/utils')
 const config = require('../../project.config')
 const { loadExcel, getFirstSheet } = require('../../helpers/excel')
 const { verify, getToken } = require('../../helpers/token')
@@ -42,13 +42,15 @@ router.get('/list', async (ctx) => {
   let query = {}
 
   // 如果_id不为空
-  if(_id) {
+  if (_id) {
     query.classify = _id
   }
   if (keyword) {
     query.name = keyword
   }
 
+  // 列出库存不为0的商品
+  query.count = { $gt: 0 }
 
   const list = await Good
     // find可以接收一个对象 按照对象里面给的属性当做条件去查找数据
@@ -83,12 +85,51 @@ router.post('/add', async (ctx) => {
   // 获取输入的商品信息
   const {
     name,
-    price,
     manufacturer,
     manufactureDate,
     classify,
+  } = getBody(ctx)
+
+  let {
+    price,
     count,
   } = getBody(ctx)
+
+  count = Number(count)
+  price = Number(price)
+
+  if (name === '' || price < 0 || manufacturer === '' || manufactureDate === 0 || classify === '' || count < 0) {
+    ctx.body = {
+      code: 0,
+      msg: '信息填写错误，商品添加失败！',
+    }
+    return
+  }
+
+  // 查询商品名是否已经存在
+  const list = await Good.find({
+    name,
+  })
+
+  // 如果list存在进行判断
+  if (list) {
+    // 查询是否存在相同生产日期的商品
+    for (let item of list) {
+      // 如果年月日相同则为同一商品
+      if (getSimpleTime(item.manufactureDate) === getSimpleTime(manufactureDate)) {
+        // 如果商品存在且生产日期一样, 直接增加库存并提示
+        item.count += count
+        const res = await item.save()
+        ctx.body = {
+          code: 1,
+          msg: '商品已存在, 已增加库存，请返回查询！',
+          data: res
+        }
+        return
+      }
+    }
+  }
+
 
   // 创建商品
   const good = new Good({
@@ -213,6 +254,11 @@ router.post('/update', async (ctx) => {
     ...other
   } = getBody(ctx)
 
+  const {
+    manufactureDate,
+    name,
+  } = getBody(ctx)
+
   const one = await Good.findOne({
     _id: id
   }).exec()
@@ -236,16 +282,56 @@ router.post('/update', async (ctx) => {
     }
   })
 
+  // 如果日期发生改变, 如果是否有相同名字和日期的商品, 要进行合并处理
+
+  // 查询查询所有该名字的商品 如果只有一件就跳过
+  const list = await Good.find({
+    name,
+  })
+
+  // 查询到的list 长度得是大于1的才有必要进行判断合并
+  if (list.length > 1) {
+    // 查询是否存在相同生产日期的商品
+    for (let item of list) {
+      // 确保不是自己本身
+      if (item._id !== one._id) {
+        // 判断年月日是否相同
+        if (getSimpleTime(item.manufactureDate) === getSimpleTime(manufactureDate)) {
+          // 如果商品存在且生产日期一样, 合并处理, 新库存进行信息修改, 老库存删除
+          // 修改查找到的数据
+          Object.assign(one, newQuery)
+          one.count += item.count
+          // 老的的删除
+          const oldOne = await await Good.deleteOne({
+            _id: item._id
+          })
+          const newOne = await one.save()
+          ctx.body = {
+            code: 1,
+            msg: '存在相同日期商品, 已进行合并处理，请返回查询！',
+            data: {
+              oldOne,
+              newOne,
+            }
+          }
+          return
+        }
+      }
+    }
+  }
+
   // 修改查找到的数据
   Object.assign(one, newQuery)
 
   // 保存数据插入表
-  const res = await one.save()
+  const newOne = await one.save()
 
   ctx.body = {
     code: 1,
     msg: '信息修改成功',
-    data: res,
+    data: {
+      newOne
+    },
   }
 
 })
@@ -339,7 +425,7 @@ router.post('/addMany', async (ctx) => {
 })
 
 // 获取分类库存信息
-router.get('/getStore', async(ctx) => {
+router.get('/getStore', async (ctx) => {
 
   // 最终返回一个数组
   const result = []
@@ -354,11 +440,11 @@ router.get('/getStore', async(ctx) => {
     })
     .exec()
 
-    // 获取各个分类商品的总数
+  // 获取各个分类商品的总数
   classify.forEach(classifyItem => {
     let total = 0
     res.forEach(resItem => {
-      if(classifyItem._id == resItem.classify) {
+      if (classifyItem._id == resItem.classify) {
         total += resItem.count
       }
     })
