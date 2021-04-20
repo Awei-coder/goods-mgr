@@ -24,9 +24,11 @@
           <div>
             <a-button v-only-admin @click="show = true">添加一条</a-button>
             &nbsp;
+
+              <!-- action="http://localhost:3000/upload/file" -->
             <a-upload
               @change="onUploadChange"
-              action="http://localhost:3000/upload/file"
+              action="http://47.119.174.1/upload/file"
               :headers="headers"
             >
               <a-button v-only-admin type="primary">

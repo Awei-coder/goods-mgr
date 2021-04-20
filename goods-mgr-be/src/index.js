@@ -3,10 +3,15 @@ const koaBody = require('koa-body')
 const cors = require('@koa/cors')
 const { connect } = require('./db')
 const Routes = require('./routers/index')
+const koaStatic = require('koa-static')
 const { middleware: koaJwtMiddleware, catchTokenError, checkUser } = require('./helpers/token')
 const { logMiddleware } = require('./helpers/log')
+const path = require('path')
+const config = require('./project.config')
 
 const app = new Koa()
+
+app.use(koaStatic(path.resolve(__dirname, '../public')))
 
 // 连接数据库成功后并进行下一步操作
 connect().then(() => {
@@ -42,7 +47,7 @@ connect().then(() => {
   // 开启一个 http 服务
   // 接受 http 请求 并作处理, 处理完响应
   // https 默认端口443
-  app.listen(3000, () => {
+  app.listen(config.SERVER_PORT, () => {
     console.log('启动成功');
   })
 })
