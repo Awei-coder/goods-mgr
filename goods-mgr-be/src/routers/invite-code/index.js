@@ -20,6 +20,14 @@ router.post('/add', async (ctx) => {
     count
   } = getBody(ctx)
 
+  if (typeof count !== 'number' || count.value === '' || count.value === 0) {
+    ctx.body = {
+      code: 0,
+      msg: '请输入正确的数值'
+    }
+    return
+  }
+
   const arr = []
 
   // 批量创建邀请码
@@ -83,6 +91,14 @@ router.delete('/:id', async (ctx) => {
   const res = await InviteCode.deleteOne({
     _id: id
   })
+
+  if(!res) {
+    ctx.body = {
+      code: 0,
+      msg: '不存在，删除失败',
+    }
+    return
+  }
 
   ctx.body = {
     code: 1,

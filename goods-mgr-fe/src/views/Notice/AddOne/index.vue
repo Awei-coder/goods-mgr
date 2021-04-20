@@ -11,11 +11,11 @@
 
       <a-form :label-col="{ span: 6 }">
         <a-form-item label="标题">
-          <a-input v-model:value="addForm.title" style="width: 300px" />
+          <a-input v-model:value.trim="addForm.title" style="width: 300px" />
         </a-form-item>
 
         <a-form-item label="正文内容">
-          <a-textarea v-model:value="addForm.content" placeholder="请输入正文内容..." allow-clear :rows="6" style="width: 300px"/>
+          <a-textarea v-model:value.trim="addForm.content" placeholder="请输入正文内容..." allow-clear :rows="6" style="width: 300px"/>
         </a-form-item>
 
       </a-form>

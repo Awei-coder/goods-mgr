@@ -23,7 +23,7 @@
 
           <template #actions="data">
             <a-dropdown :trigger="['click']">
-              <a-button type="danger" size="small" @click="action">
+              <a-button type="danger" size="small">
                 具体操作
                 <DownOutlined />
               </a-button>
@@ -33,15 +33,15 @@
                     <a href="javascript:;" @click="editDemand(data)">编辑</a>
                   </a-menu-item>
                   <a-menu-item key="2">
-                    <a href="javascript:;" @click="remove(data)">删除</a>
-                  </a-menu-item>
-                  <a-menu-item key="3">
                     <a
                       v-only-admin
                       href="javascript:;"
                       @click="solveDemand(data)"
                       >处理</a
                     >
+                  </a-menu-item>
+                  <a-menu-item key="3">
+                    <a href="javascript:;" @click="remove(data)">删除</a>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -107,12 +107,12 @@
       >
         <a-form :label-col="{ span: 6 }">
           <a-form-item label="标题">
-            <a-input v-model:value="addForm.title" style="width: 300px" />
+            <a-input v-model:value.trim="addForm.title" style="width: 300px" />
           </a-form-item>
 
           <a-form-item label="需求内容">
             <a-textarea
-              v-model:value="addForm.content"
+              v-model:value.trim="addForm.content"
               placeholder="请输入需求内容..."
               allow-clear
               :rows="6"
@@ -121,7 +121,7 @@
           </a-form-item>
           <a-form-item label="备注">
             <a-textarea
-              v-model:value="addForm.userAttach"
+              v-model:value.trim="addForm.userAttach"
               placeholder="若有备注请输入..."
               allow-clear
               :rows="3"
@@ -141,12 +141,12 @@
       >
         <a-form :label-col="{ span: 6 }">
           <a-form-item label="标题">
-            <a-input v-model:value="editForm.title" style="width: 300px" />
+            <a-input v-model:value.trim="editForm.title" style="width: 300px" />
           </a-form-item>
 
           <a-form-item label="需求内容">
             <a-textarea
-              v-model:value="editForm.content"
+              v-model:value.trim="editForm.content"
               placeholder="请输入需求内容..."
               allow-clear
               :rows="6"
@@ -155,7 +155,7 @@
           </a-form-item>
           <a-form-item label="备注">
             <a-textarea
-              v-model:value="editForm.userAttach"
+              v-model:value.trim="editForm.userAttach"
               placeholder="若有备注请输入..."
               allow-clear
               :rows="3"
@@ -185,7 +185,7 @@
 
           <a-form-item label="备注">
             <a-textarea
-              v-model:value="solveForm.adminAttach"
+              v-model:value.trim="solveForm.adminAttach"
               placeholder="若有备注请输入..."
               allow-clear
               :rows="3"

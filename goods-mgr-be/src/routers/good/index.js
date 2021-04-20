@@ -305,6 +305,7 @@ router.post('/update', async (ctx) => {
           const oldOne = await await Good.deleteOne({
             _id: item._id
           })
+          
           const newOne = await one.save()
           ctx.body = {
             code: 1,

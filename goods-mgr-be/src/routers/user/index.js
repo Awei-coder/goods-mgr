@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const { getBody } = require('../../helpers/utils')
 const config = require('../../project.config')
 const { verify, getToken } = require('../../helpers/token')
-const { loadExcel,getFirstSheet } = require('../../helpers/excel')
+const { loadExcel, getFirstSheet } = require('../../helpers/excel')
 
 const User = mongoose.model('User')
 const Character = mongoose.model('Character')
@@ -78,6 +78,14 @@ router.post('/add', async (ctx) => {
     character,
   } = getBody(ctx)
 
+  if (account === '' || password === '') {
+    ctx.body = {
+      code: 0,
+      msg: '信息填写有误，请冲洗填写'
+    }
+    return
+  }
+
   // 获取传过来的角色
   const char = await Character.findOne({
     _id: character
@@ -110,6 +118,7 @@ router.post('/add', async (ctx) => {
 
 // 重置密码
 router.post('/reset/password', async (ctx) => {
+  // 获取需要重置用户的id
   const {
     id
   } = getBody(ctx)
@@ -126,6 +135,14 @@ router.post('/reset/password', async (ctx) => {
     return
   }
 
+  // 获取token上的用户_id, 如果重置的是现在正在登陆的, 重置后清除token重新登陆
+  const { _id } = await verify(getToken(ctx))
+  const nowUser = await User.findOne({
+    _id
+  })
+  // flag标识, 如果true是同一用户, false则不是
+  let flag = (user.account === nowUser.account)
+
   // 设置默认密码 123456
   user.password = config.DEFAULT_PASSWORD
 
@@ -137,6 +154,7 @@ router.post('/reset/password', async (ctx) => {
     data: {
       id: res._id,
       account: res.account,
+      flag,
     }
   }
 
@@ -229,7 +247,7 @@ router.post('/addMany', async (ctx) => {
       character: member._id,
     })
   });
-  
+
   await User.insertMany(arr)
 
   ctx.body = {

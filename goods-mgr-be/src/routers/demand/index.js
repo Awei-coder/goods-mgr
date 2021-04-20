@@ -85,8 +85,17 @@ router.post('/add', async (ctx) => {
     adminAttach,
   } = getBody(ctx)
 
+  // 判断是否为空
+  if (title === '' || content === '') {
+    ctx.body = {
+      code: 0,
+      msg: '请填写完内容再提交~'
+    }
+    return
+  }
+
   let {
-    status,
+    status = 1,
   } = getBody(ctx)
 
   status = Number(status)
@@ -115,11 +124,15 @@ router.post('/add', async (ctx) => {
 // 更新需求
 router.post('/update', async (ctx) => {
   const editForm = getBody(ctx)
+  let {
+    status
+  } = getBody(ctx)
+  status = Number(status)
 
+  // 需求不存在
   const one = await Demand.findOne({
     _id: editForm._id
   })
-
 
   if (!one) {
     ctx.body = {
@@ -129,7 +142,33 @@ router.post('/update', async (ctx) => {
     return
   }
 
+  // 如果已经被处理过了, 普通用户无法再编辑
+  if (status == 2 || status == 3) {
+    // 获取操作者
+    const { character: c } = await verify(getToken(ctx))
+    const actioner = await character.findOne({
+      _id: c
+    })
+    if (actioner.title === '成员') {
+      ctx.body = {
+        code: 0,
+        msg: '该需求已被管理员处理，无法再编辑，请添加新需求。'
+      }
+      return
+    }
+  }
+
+  // 判断是否为空
+  if (editForm.title === '' || editForm.content === '') {
+    ctx.body = {
+      code: 0,
+      msg: '请填写完内容再提交~'
+    }
+    return
+  }
+
   Object.assign(one, editForm)
+  one.solveTime = new Date().valueOf()
 
   const res = await one.save()
 

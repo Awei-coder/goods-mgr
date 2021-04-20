@@ -8,7 +8,7 @@
     >
       <a-form :model="addForm" :label-col="{ span: 6 }">
         <a-form-item label="商品名">
-          <a-input v-model:value="addForm.name" />
+          <a-input v-model:value.trim="addForm.name" />
         </a-form-item>
 
         <a-form-item label="价格">
@@ -20,11 +20,14 @@
         </a-form-item>
 
         <a-form-item label="制造商">
-          <a-input v-model:value="addForm.manufacturer" />
+          <a-input v-model:value.trim="addForm.manufacturer" />
         </a-form-item>
 
         <a-form-item label="出厂日期">
-          <a-date-picker placeholder="请选择出厂日期" v-model:value="addForm.manufactureDate" />
+          <a-date-picker
+            placeholder="请选择出厂日期"
+            v-model:value="addForm.manufactureDate"
+          />
         </a-form-item>
 
         <a-form-item label="分类">
@@ -40,7 +43,7 @@
         </a-form-item>
 
         <a-form-item label="库存">
-          <a-input v-model:value="addForm.count" />
+          <a-input-number :min="0" :max="999999999999" v-model:value="addForm.count" />
         </a-form-item>
       </a-form>
     </a-modal>

@@ -18,6 +18,17 @@ export default defineComponent({
     const addForm = reactive(clone(defaultFormData))
 
     const submit = async () => {
+
+      if (addForm.title === '') {
+        message.warning('标题不能为空')
+        return
+      }
+
+      if (addForm.content === '') {
+        message.warning('内容不能为空')
+        return
+      }
+
       const res = await notice.addNotice(addForm.title, store.state.userInfo.account, addForm.content)
 
       result(res)

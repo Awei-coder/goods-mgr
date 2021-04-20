@@ -39,6 +39,14 @@ router.post('/add', async (ctx) => {
     title
   } = ctx.request.body
 
+  if(title === '' || title.includes(' ')) {
+    ctx.body = {
+      code: 0,
+      msg: '信息填写有误，请重新填写'
+    }
+    return
+  }
+
   const one = await GoodClassify.findOne({
     title
   }).exec()
@@ -88,6 +96,14 @@ router.post('/update/title', async (ctx) => {
     id,
     title
   } = ctx.request.body
+
+  if(title === '' || title.includes(' ')) {
+    ctx.body = {
+      code: 0,
+      msg: '信息填写有误，请重新填写'
+    }
+    return
+  }
 
   const one = await GoodClassify.findOne({
     _id: id

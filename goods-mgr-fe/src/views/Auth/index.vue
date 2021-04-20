@@ -13,7 +13,7 @@
               <a-input
                 size="large"
                 placeholder="账户"
-                v-model:value="loginForm.account"
+                v-model:value.trim="loginForm.account"
               >
                 <template #prefix>
                   <UserOutlined />
@@ -25,7 +25,8 @@
               <a-input-password
                 size="large"
                 placeholder="密码"
-                v-model:value="loginForm.password"
+                v-model:value.trim="loginForm.password"
+                @keydown.enter.native="login"
               >
                 <template #prefix>
                   <LockOutlined />

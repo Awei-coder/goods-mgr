@@ -1,6 +1,7 @@
 import { defineComponent, reactive } from 'vue'
 import { user } from '@/service'
 import { result, clone } from '@/helpers/utils'
+import { UserAddOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import store from '@/store'
 
@@ -11,6 +12,9 @@ const defaultFormData = {
 }
 
 export default defineComponent({
+  components: {
+    UserAddOutlined
+  },
   props: {
     show: Boolean,
   },
@@ -30,6 +34,17 @@ export default defineComponent({
     // 提交按钮
     const submit = async () => {
       const form = clone(addForm)
+
+      if (form.account === '') {
+        message.warning('用户名不能为空')
+        return
+      }
+
+      if (form.password === '') {
+        message.warning('密码不能为空')
+        return
+      }
+
       // 发送添加请求
       const res = await user.add(form.account, form.password, form.character)
 

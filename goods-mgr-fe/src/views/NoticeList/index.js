@@ -94,6 +94,17 @@ export default defineComponent({
 
     // 点击编辑确认按钮
     const updateNotice = async () => {
+      
+      if (editForm.value.title === '') {
+        message.warning('标题不能为空')
+        return
+      }
+
+      if (editForm.value.content === '') {
+        message.warning('内容不能为空')
+        return
+      }
+
       const res = await notice.updateNotice(editForm.value)
 
       result(res)

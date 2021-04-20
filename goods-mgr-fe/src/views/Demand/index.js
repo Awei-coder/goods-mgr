@@ -99,6 +99,16 @@ export default defineComponent({
 
     // 提交按钮
     const submit = async () => {
+
+      if(addForm.title === '') {
+        message.warning('标题不能为空')
+        return
+      }
+      if(addForm.content === '') {
+        message.warning('内容不能为空')
+        return
+      }
+
       const res = await demand.add(addForm)
 
       result(res)
@@ -119,8 +129,6 @@ export default defineComponent({
     const remove = async ({ record: { _id } }) => {
       Modal.confirm({
         title: `确认要删除该需求吗？`,
-        okText: '确定',
-        cancelText: '取消',
         okType: 'danger',
 
         // 确定按钮
@@ -158,6 +166,17 @@ export default defineComponent({
 
     // 提交更新
     const updateDemand = async () => {
+
+      if(editForm.title === '') {
+        message.warning('标题不能为空')
+        return
+      }
+
+      if(editForm.content === '') {
+        message.warning('内容不能为空')
+        return
+      }
+
       const res = await demand.update(editForm)
 
       result(res)
@@ -183,23 +202,10 @@ export default defineComponent({
       result(res)
         .success(({ data, msg }) => {
           message.success(msg)
-          console.log(data);
           showSolve.value = false
           getList()
         })
-        .fail(({ msg }) => {
-          message.error(msg)
-        })
     }
-
-    // 操作按钮状态
-    const action = (e) => {
-      // e.target.disabled = true
-      // if(e.target.disabled) {
-      //   message.error('该请求已被处理！')
-      // }
-    }
-
 
     const setPage = (page) => {
       curPage.value = page
@@ -233,7 +239,6 @@ export default defineComponent({
       updateDemand,
       editForm,
       solveDemand,
-      action,
       showSolve,
       solveForm,
       submitSolveDemand,

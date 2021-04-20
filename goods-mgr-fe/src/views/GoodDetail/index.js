@@ -2,7 +2,7 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { good, inventoryLog } from '@/service'
 import { result, formatTimeStamp } from '@/helpers/utils'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import Update from '@/views/Goods/Update/index.vue'
 import { CheckOutlined } from '@ant-design/icons-vue'
 import store from '@/store'
@@ -15,6 +15,10 @@ export default defineComponent({
     CheckOutlined,
   },
   setup() {
+
+    // 加载动画
+    const loading = ref(true)
+
     // 获取分类
     const { goodClassifyList } = store.state
 
@@ -55,31 +59,33 @@ export default defineComponent({
     ]
 
     // 获取具体分类
-    const getSpecifyClassify =  (data) => {
+    const getSpecifyClassify = (data) => {
       const one = goodClassifyList.find(item => {
         return item._id === data.classify
       })
-      data.classify = one.title
+      data.classifyTitle = one.title
     }
 
     // 获取服务端传过来的数据 获取商品详情信息
     const getDetail = async (id) => {
+      loading.value = true
       const res = await good.detail(id)
-
+      loading.value = false
+      
       result(res)
         .success(({ data }) => {
           getSpecifyClassify(data)
           detailInfo.value = data
         })
     }
-    
+
     // 获取出入库日志
     const getInventoryLog = async () => {
       // 这里传入的id是当前操作商品的id, 用于筛选出入库日志
       const res = await inventoryLog.list(curLogType.value, logCurPage.value, 10, id)
 
       result(res)
-        .success(({data: {list, total}}) => {
+        .success(({ data: { list, total } }) => {
           log.value = list
           logTotal.value = total
         })
@@ -104,16 +110,26 @@ export default defineComponent({
     }
 
     const remove = async () => {
-      // 发送删除请求
-      const res = await good.remove(id)
 
-      result(res)
-        .success(({ msg }) => {
-          // 提示删除成功
-          message.success(msg)
-          // 页面跳转回上一层
-          router.replace('/goods')
-        })
+      Modal.confirm({
+        title: `确认要删除该商品吗？`,
+        okType: 'danger',
+
+        // 确定按钮
+        onOk: async () => {
+          // 发送删除请求
+          const res = await good.remove(id)
+
+          result(res)
+            .success(({ msg }) => {
+              // 提示删除成功
+              message.success(msg)
+              // 页面跳转回上一层
+              router.replace('/goods')
+            })
+        }
+      })
+
     }
 
     // 更新商品
@@ -135,6 +151,8 @@ export default defineComponent({
       columns,
       logFilter,
       curLogType,
+      loading,
+      getDetail,
     }
   }
 })

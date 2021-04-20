@@ -16,8 +16,23 @@ router.post('/update/password', async (ctx) => {
     oldPassword
   } = getBody(ctx)
 
-  // 获取当前登陆token的id
+  if(password === '' || oldPassword === '') {
+    ctx.body ={
+      code: 0,
+      msg: '密码错误，请重新输入'
+    }
+    return 
+  }
 
+  if(password !== oldPassword ) {
+    ctx.body ={
+      code: 0,
+      msg: '密码错误，请重新输入'
+    }
+    return 
+  }
+
+  // 获取当前登陆token的id
   const { _id } = await verify(getToken(ctx))
 
   const user = await User.findOne({

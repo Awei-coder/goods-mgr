@@ -21,6 +21,12 @@ export default defineComponent({
         newPassword,
         confirmNewPassword,
       } = form
+      
+      if(newPassword === '' || oldPassword === '' || confirmNewPassword === '') {
+        message.warning('密码不能为空! ')
+        return
+      }
+
       if(newPassword !== confirmNewPassword) {
         message.error('密码不一致, 请重新输入！')
         return

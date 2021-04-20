@@ -2,6 +2,8 @@ import { defineComponent, ref, onMounted, reactive } from 'vue'
 import { user } from '@/service'
 import { result, formatTimeStamp } from '@/helpers/utils'
 import { getCharacterInfoById } from '@/helpers/character'
+import { setToken } from '@/helpers/token'
+import { useRouter } from 'vue-router'
 import { message, Modal } from 'ant-design-vue'
 import AddOne from './AddOne/index.vue'
 import { EditOutlined } from '@ant-design/icons-vue'
@@ -56,6 +58,7 @@ export default defineComponent({
       // 当前编辑的对象
       current: {}
     })
+    const router = useRouter()
 
     // 获取用户列表
     const getUsers = async () => {
@@ -105,16 +108,21 @@ export default defineComponent({
 
       Modal.confirm({
         title: `确认要重置密码吗？`,
-        okText: '确定',
-        cancelText: '取消',
+        okType: 'danger',
 
         // 确定按钮
         onOk: async () => {
           const res = await user.resetPassword(_id)
 
           result(res)
-            .success(({ msg }) => {
+            .success(({ msg, data: { flag } }) => {
               message.success(msg)
+              // 如果重置当前用户的账号密码, 触发清除token重新登陆
+              if (flag) {
+                // 清除token 触发重新登陆
+                setToken('')
+                router.replace('/auth')
+              }
             })
         }
       })

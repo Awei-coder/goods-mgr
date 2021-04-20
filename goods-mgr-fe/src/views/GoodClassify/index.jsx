@@ -35,6 +35,17 @@ export default defineComponent({
     }
 
     const add = async () => {
+
+      if(title.value === '') {
+        message.warning('分类名不能为空')
+        return
+      }
+
+      if(title.value.includes(' ')) {
+        message.warning('分类名不能含空格，请重新输入')
+        return
+      }
+
       const res = await goodClassify.add(title.value)
 
       result(res)
@@ -48,8 +59,6 @@ export default defineComponent({
     const remove = async ({ _id }) => {
       Modal.confirm({
         title: `确认要删除该分类吗？`,
-        okText: '确定',
-        cancelText: '取消',
         okType: 'danger',
 
         // 确定按钮
@@ -77,18 +86,28 @@ export default defineComponent({
         // 确定按钮
         onOk: async () => {
           const el = document.querySelector('.__good_classify_new_title')
+          if(el.value === '') {
+            message.warning('分类名不能为空')
+            return
+          }
+
+          if(el.value.includes(' ')) {
+            message.warning('分类名不能含空格，请重新输入')
+            return
+          }
+
           const res = await goodClassify.update(_id, el.value)
 
           result(res)
             .success(({ msg }) => {
               message.success(msg)
-              // getList()
+              getList()
               // 减少服务端请求
-              list.value.forEach(item => {
-                if (item._id === _id) {
-                  item.title = el.value
-                }
-              })
+              // list.value.forEach(item => {
+              //   if (item._id === _id) {
+              //     item.title = el.value
+              //   }
+              // })
             })
         }
       })

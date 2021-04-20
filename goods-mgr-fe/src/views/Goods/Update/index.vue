@@ -21,7 +21,7 @@
 
       <a-form :label-col="{ span: 6 }">
         <a-form-item label="商品名">
-          <a-input v-model:value="editForm.name" />
+          <a-input v-model:value.trim="editForm.name" />
         </a-form-item>
 
         <a-form-item label="价格">
@@ -33,7 +33,7 @@
         </a-form-item>
 
         <a-form-item label="制造商">
-          <a-input v-model:value="editForm.manufacturer" />
+          <a-input v-model:value.trim="editForm.manufacturer" />
         </a-form-item>
 
         <a-form-item label="出产日期">

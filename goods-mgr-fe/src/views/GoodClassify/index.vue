@@ -5,7 +5,7 @@
         <a-input
          placeholder="请输入分类"
           style="width: 200px;"
-          v-model:value="title"></a-input>
+          v-model:value.trim="title"></a-input>
         &nbsp;
         <a-button type="primary" @click="add">添加</a-button>
       </div>
