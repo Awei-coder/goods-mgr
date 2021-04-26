@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, } from 'vue'
+import { defineComponent, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import store from '@/store'
 import { inventoryLog } from '@/service'
@@ -37,11 +37,10 @@ export default defineComponent({
     // 近期出库数据项目inventory-log  -> 二维数组 存储近五天数据
     const accentInStockItems = [[], [], [], [], []]
 
+    let showValue = null
+
     // 显示销售量数据
     const showValueEchart = function () {
-
-      // 获取设置元素
-      const showValue = echarts.init(document.getElementById('showDayStoreValue'));
 
       // vuex 保存每日出库量
       if(props.simple) {
@@ -250,9 +249,17 @@ export default defineComponent({
 
     // 实例挂载时载入信息
     onMounted(async () => {
+      // 获取设置元素
+      showValue = echarts.init(document.getElementById('showDayStoreValue'));
       goodClassify(goodClassifyTitle)
       await getSaleValue()
       showValueEchart()
+    })
+
+    onUnmounted(() => {
+      if(showValue) {
+        showValue.dispose()
+      }
     })
 
     return {

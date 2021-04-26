@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, } from 'vue'
+import { defineComponent, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import store from '@/store'
 import { good } from '@/service'
@@ -27,6 +27,8 @@ export default defineComponent({
       })
     }
 
+    let showStore = null
+
     // 显示库存数据
     const showStoreEchart = function (goodClassifyTitle, total) {
 
@@ -40,14 +42,12 @@ export default defineComponent({
         }
       }
 
-      // 获取设置元素
-      const showStore = echarts.init(document.getElementById('showStore'));
 
       // echarts配置
       const storeOption = getStoreOption(goodClassifyTitle, total)
 
       // 保存配置
-      showStore.setOption(storeOption);
+      showStore.setOption(storeOption, true);
 
       // 标志量, 用来记录是在分类总量还是具体分类里面
       let flag = false
@@ -122,9 +122,18 @@ export default defineComponent({
 
     // 实例挂载时载入信息
     onMounted(async () => {
+      // 获取设置元素
+      showStore = echarts.init(document.getElementById('showStore'));
       getStore()
       goodClassify(goodClassifyTitle)
     })
+
+    onUnmounted(() => {
+      if (showStore) {
+        showStore.dispose()
+      }
+    })
+
 
     return {
 

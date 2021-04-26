@@ -23,7 +23,7 @@
           &nbsp;
           <a-upload
             @change="onUploadChange"
-            action="http://localhost:3000/upload/file"
+            action="http://localhost:3001/upload/file"
             :headers="headers"
           >
             <a-button type="primary">

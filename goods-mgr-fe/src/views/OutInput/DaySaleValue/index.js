@@ -1,9 +1,10 @@
-import { defineComponent, onMounted, } from 'vue'
+import { defineComponent, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import store from '@/store'
 import { good, inventoryLog } from '@/service'
 import { result } from '@/helpers/utils'
 import { getTime, getSaleDayValueOption } from '@/helpers/out-input'
+import { message } from 'ant-design-vue'
 
 
 export default defineComponent({
@@ -39,13 +40,13 @@ export default defineComponent({
     // 近期出库数据项目inventory-log  -> 二维数组 存储近五天数据
     const accentInStockItems = [[], [], [], [], []]
 
+    let showDayValue = null
+
     // 显示销售额数据
     const showDayValueEchart = function () {
-      // 获取设置元素
-      const showDayValue = echarts.init(document.getElementById('showDaySaleValue'));
 
       // 存放具体商品的数组 good-items
-      const specificName = [[],[],[],[],[]]
+      const specificName = [[], [], [], [], []]
 
       // 获取每日具体商品方法
       function getSpecifyItems(specificItems) {
@@ -99,8 +100,7 @@ export default defineComponent({
       // 弹出第一个数据字符串 'date'
       saleDatValueDate.shift()
 
-      // vuex 保存每日销售额
-      if(props.simple) {
+      if (props.simple) {
         context.emit('getSaleDayValueData', saleDayValueData)
       }
 
@@ -109,6 +109,64 @@ export default defineComponent({
 
       // 保存配置
       showDayValue.setOption(saleValueOption)
+
+      // 标志量, 用来记录是在分类总量还是具体分类里面
+      let flag = false
+
+      // 当柱状图被点击的时候 查询每日商品的具体销量情况
+      showDayValue.on('click', async function (params) {
+
+        // 查询当前分类是在总分类还是在具体分类里面, 如果是具体分类里面返回false
+        flag = saleDatValueDate.some(item => {
+          return item === params.name
+        })
+
+        if (flag) {
+          // 具体商品数量
+          const specificDayTotal = []
+          // 查询到的具体分类和ID
+          const specificDayName = []
+          const specificDayID = []
+
+          // 获取具体数据
+          specificName[params.dataIndex].forEach(item => {
+            // 如果商品名已经存在
+            if(!specificDayName.some(value => value===item.name)) {
+              specificDayName.push(item.name)
+              specificDayID.push(item._id)
+            }
+          })
+
+          console.log(specificName[params.dataIndex]);
+          console.log(accentOutStockItems[params.dataIndex]);
+
+          specificDayID.forEach(item => {
+            let num = 0
+            accentOutStockItems[params.dataIndex].forEach(value => {
+              if (value.goodName === item) {
+                num += value.num
+              }
+            })
+            specificDayTotal.push(num)
+          })
+
+          console.log(specificDayTotal);
+          console.log(specificDayName);
+
+          // 具体销售商品数据配置
+          const dayValueOption = getSaleDayValueOption(specificDayName, specificDayTotal)
+
+          // 保存配置
+          showDayValue.setOption(dayValueOption)
+
+          return
+        }
+
+        message.warn('当前分类不可再细分，请返回上一层！')
+        // 如果在具体分类里面直接return
+        return
+
+      });
     }
 
     // 获取出入库信息
@@ -179,6 +237,8 @@ export default defineComponent({
 
     // 实例挂载时载入信息
     onMounted(async () => {
+      // 获取设置元素
+      showDayValue = echarts.init(document.getElementById('showDaySaleValue'));
       const { data: { data: { list } } } = await good.list()
       totalItems = list
       goodClassify(goodClassifyTitle)
@@ -186,8 +246,14 @@ export default defineComponent({
       showDayValueEchart()
     })
 
+    onUnmounted(() => {
+      if (showDayValue) {
+        showDayValue.dispose()
+      }
+    })
+
     return {
-      
+
     }
   }
 })

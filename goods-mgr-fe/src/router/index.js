@@ -21,27 +21,27 @@ const routes = [
       {
         path: 'goods',
         name: 'Goods',
-        component: () => import(/* webpackChunkName: "Goods" */ '../views/Goods/index.vue')
+        component: () => import(/* webpackChunkName: "goods" */ '../views/Goods/index.vue')
       },
       {
         path: 'goods/:id',
         name: 'GoodDetail',
-        component: () => import(/* webpackChunkName: "GoodDetail" */ '../views/GoodDetail/index.vue')
+        component: () => import(/* webpackChunkName: "goodDetail" */ '../views/GoodDetail/index.vue')
       },
       {
         path: 'user',
         name: 'User',
-        component: () => import(/* webpackChunkName: "Users" */ '../views/Users/index.vue')
+        component: () => import(/* webpackChunkName: "user" */ '../views/Users/index.vue')
       },
       {
         path: 'log',
         name: 'Log',
-        component: () => import(/* webpackChunkName: "Log" */ '../views/Log/index.vue')
+        component: () => import(/* webpackChunkName: "log" */ '../views/Log/index.vue')
       },
       {
         path: 'reset/password',
         name: 'ResetPassword',
-        component: () => import(/* webpackChunkName: "ResetPassword" */ '../views/ResetPassword/index.vue')
+        component: () => import(/* webpackChunkName: "resetPassword" */ '../views/ResetPassword/index.vue')
       },
       {
         path: 'invite-code',
@@ -66,7 +66,7 @@ const routes = [
       {
         path: 'out-input',
         name: 'OutInput',
-        component: () => import(/* webpackChunkName: "bashboard" */ '../views/OutInput/index.vue')
+        component: () => import(/* webpackChunkName: "outInput" */ '../views/OutInput/index.vue')
       },
       {
         path: 'notice',
@@ -76,12 +76,12 @@ const routes = [
       {
         path: 'notice/list',
         name: 'NoticeList',
-        component: () => import(/* webpackChunkName: "NoticeList" */ '../views/NoticeList/index.vue')
+        component: () => import(/* webpackChunkName: "noticeList" */ '../views/NoticeList/index.vue')
       },
       {
         path: 'demand',
         name: 'Demand',
-        component: () => import(/* webpackChunkName: "Demand" */ '../views/Demand/index.vue')
+        component: () => import(/* webpackChunkName: "demand" */ '../views/Demand/index.vue')
       },
     ]
   },

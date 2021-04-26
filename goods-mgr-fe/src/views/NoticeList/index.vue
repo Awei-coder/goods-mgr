@@ -4,7 +4,7 @@
       <div class="header">
         <space-between>
           <h2>公告列表</h2>
-          <a-button type="primary" @click="show = true">添加公告</a-button>
+          <a-button v-only-admin type="primary" @click="show = true">添加公告</a-button>
         </space-between>
       </div>
 

@@ -72,22 +72,20 @@ export const getSaleDayValueOption = (saleDatValueDate, total) => {
       type: 'bar',
       data: total,
       itemStyle: {
-        normal: {
-          //设置颜色
-          color: function (params) {
-            var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622'];
-            return colorList[params.dataIndex]
-          },
-          // 设置上标数值显示
-          label: {
-            show: true,
-            position: 'top',
-            textStyle: {
-              color: 'black',
-            }
-          },
+        //设置颜色
+        color: function (params) {
+          var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622'];
+          return colorList[params.dataIndex]
+        },
+      },
+      // 设置上标数值显示
+      label: {
+        show: true,
+        position: 'top',
+        axisName: {
+          color: 'black',
         }
-      }
+      },
     }],
   }
 }
@@ -129,30 +127,22 @@ export const getSaleValueOption = (saleValueDate, inStock, outStock) => {
       {
         type: 'line',
         seriesLayoutBy: 'row',
-        itemStyle: {
-          normal: {
-            label: {
-              show: true,
-              position: 'top',
-              textStyle: {
-                color: 'black',
-              }
-            }
+        label: {
+          show: true,
+          position: 'top',
+          axisName: {
+            color: 'black',
           }
         }
       },
       {
         type: 'line',
         seriesLayoutBy: 'row',
-        itemStyle: {
-          normal: {
-            label: {
-              show: true,
-              position: 'top',
-              textStyle: {
-                color: 'black',
-              }
-            }
+        label: {
+          show: true,
+          position: 'top',
+          axisName: {
+            color: 'black',
           }
         }
       },
@@ -191,22 +181,20 @@ export const getStoreOption = (goodClassifyTitle, total) => {
       type: 'bar',
       data: total,
       itemStyle: {
-        normal: {
-          //设置颜色
-          color: function (params) {
-            var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622'];
-            return colorList[params.dataIndex]
-          },
-          // 设置上标数值显示
-          label: {
-            show: true,
-            position: 'top',
-            textStyle: {
-              color: 'black',
-            }
-          },
+        //设置颜色
+        color: function (params) {
+          var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622'];
+          return colorList[params.dataIndex]
+        },
+      },
+      // 设置上标数值显示
+      label: {
+        show: true,
+        position: 'top',
+        axisName: {
+          color: 'black',
         }
-      }
+      },
     }],
   }
 }
