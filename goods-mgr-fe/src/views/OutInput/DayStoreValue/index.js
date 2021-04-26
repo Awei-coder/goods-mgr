@@ -1,9 +1,10 @@
 import { defineComponent, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import store from '@/store'
-import { inventoryLog } from '@/service'
+import { inventoryLog, good } from '@/service'
 import { result, } from '@/helpers/utils'
 import { getTime, getSaleValueOption, } from '@/helpers/out-input'
+import { message } from 'ant-design-vue'
 
 export default defineComponent({
   props: {
@@ -27,7 +28,8 @@ export default defineComponent({
     const saleValueDate = []
     // 出入库情况数组 -> 用来配置echarts
     let outStock = ['出库情况'], inStock = ['入库情况']
-
+    // 保存全部商品变量
+    let totalItems = []
     // 出库数据项目
     const outStockItems = []
     // 入库数据项目
@@ -43,10 +45,11 @@ export default defineComponent({
     const showValueEchart = function () {
 
       // vuex 保存每日出库量
-      if(props.simple) {
+      if (props.simple) {
         context.emit('getOutStock', outStock)
       }
 
+      // console.log(saleValueDate, inStock, outStock);
       // 销售额数据配置
       const saleValueOption = getSaleValueOption(saleValueDate, inStock, outStock)
 
@@ -54,126 +57,198 @@ export default defineComponent({
       showValue.setOption(saleValueOption);
 
       // 标志量, 用来记录是在分类总量还是具体分类里面
-      // let classifyFlag = false
+      let flag = false
 
       // 当柱状图被点击的时候
       showValue.on('click', async function (params) {
-
+        // console.log(accentOutStockItems);
+        // console.log(accentInStockItems);
+        // console.log(saleValueDate);
+        // console.log(inStock);
+        // console.log(outStock);
         // 当前点击的图的index
         // console.log(params.name);
         // console.log(params.dataIndex);
         // console.log(params.seriesIndex)
         // console.log(params.seriesName);
-        // console.log(totalItems);
-        // console.log(accentOutStockItems);
-        // console.log(accentInStockItems);
+
+        // 查询当前分类是在总分类还是在具体分类里面, 如果是具体分类里面返回false
+        flag = saleValueDate.some(item => {
+          return item === params.name
+        })
 
         // // 具体商品数量
         // const specificTotal = []
         // // 查询到的具体分类
         // const specificClassifyName = []
-        // // 存放具体商品的数组
-        // const specificName = []
+        if (flag) {
+          // 存放具体商品的数组
+          const specificOutName = [[], [], [], [], []]
+          // 出库商品具体到日
+          const specificOutDayName = []
+          let specifiOutDayTotal = []
+          const specificInName = [[], [], [], [], []]
+          // 入库商品具体到日
+          const specificInDayName = []
+          let specifiInDayTotal = []
+          const specificOutDayID = []
+          const specificInDayID = []
+          // 总分类下标
+          let totalName = []
 
-        // // 获取所点击的每日具体商品方法
-        // function getSpecifyItems(specificItems, index) {
-        //   // 置空数组
-        //   specificName.splice(0, specificName.splice)
-        //   // 根据出入库id筛选出商品
-        //   totalItems.forEach(item => {
-        //     specificItems[index].forEach(value => {
-        //       if (item._id === value.goodName) {
-        //         // 深拷贝
-        //         const tempItem = JSON.parse(JSON.stringify(item))
-        //         // 把销量赋值给出入库数据
-        //         tempItem.num = value.num
-        //         specificName.push(tempItem)
-        //       }
-        //     })
-        //   })
-        // }
+          // 获取每日具体商品方法
+          function getSpecifyItems(specificItems, specificName) {
+            // 置空数组
+            specificName.forEach((item, index) => {
+              specificName[index].splice(0, specificName[index].length)
+            })
+            // 根据出入库id筛选出商品 -> 看下数据就知道要三重
+            totalItems.forEach(item => {
+              specificItems.forEach((value, index) => {
+                value.forEach((childValue) => {
+                  if (item._id === childValue.goodName) {
+                    // 深拷贝
+                    const tempItem = JSON.parse(JSON.stringify(item))
+                    // 把销量赋值给出入库数据
+                    tempItem.num = childValue.num
+                    specificName[index].push(tempItem)
+                  }
+                })
+              })
+            })
+          }
 
-        // // 筛选
-        // function getDayClassify(specificName) {
-        //   // 临时存储筛选出的分类 -> 带销量
-        //   const tempArr = []
-        //   // 临时存储筛选出的分类 -> 不带销量
-        //   const uniqueClassify = []
-        //   // 筛选出入库的存在分类
-        //   specificName.forEach(item => {
-        //     goodClassifyList.forEach(value => {
-        //       if (item.classify === value._id) {
-        //         tempArr.push({
-        //           title: value.title,
-        //           num: item.num
-        //         })
-        //         uniqueClassify.push(value.title)
-        //       }
-        //     })
-        //   })
+          // 获取每日进出库商品
+          getSpecifyItems(accentOutStockItems, specificOutName)
+          getSpecifyItems(accentInStockItems, specificInName)
 
-        //   // 数组去重
-        //   return {
-        //     tempArr,
-        //     uniqueClassify: uniqueArr(uniqueClassify),
-        //   }
-        // }
+          // 获取具体每日具体商品数据的方法
+          function getSpecifyData(specificName, specificDayName, specificDayID) {
+            specificName[params.dataIndex].forEach(item => {
+              // 如果商品名已经存在
+              if (!specificDayName.some(value => value === item.name)) {
+                specificDayName.push(item.name)
+                specificDayID.push(item._id)
+              }
+            })
+          }
+          // 获取进出库具体数据
+          getSpecifyData(specificOutName, specificOutDayName, specificOutDayID)
+          getSpecifyData(specificInName, specificInDayName, specificInDayID)
+          // console.log(specificOutDayName, specificOutDayID);
+          // console.log(specificInDayName, specificInDayID);
 
-        // // 如果点击的是第一层
-        // classifyFlag = saleValueDate.some(item => {
-        //   return item === params.name
-        // })
+          // 获取每日具体商品进出库数量的方法
+          function getSpecifyNumData(specificDayID, stockItems, specificDayTotal) {
+            specificDayID.forEach((item, index) => {
+              let num = 0
+              stockItems[params.dataIndex].forEach(value => {
+                if (value.goodName === item) {
+                  num += value.num
+                }
+              })
+              specificDayTotal.push(num)
+            })
+          }
 
-        // if (classifyFlag) {
-        //   // 拉取下分类大全
-        //   const saleGoodClassify = []
-        //   // 获取总分类名字
-        //   goodClassify(saleGoodClassify)
+          getSpecifyNumData(specificOutDayID, accentOutStockItems, specifiOutDayTotal)
+          getSpecifyNumData(specificInDayID, accentInStockItems, specifiInDayTotal)
 
-        //   if (params.seriesIndex === 0) {
-        //     // 获取入库具体商品
-        //     getSpecifyItems(accentInStockItems, params.dataIndex)
+          // 获取总分类
+          if (specificOutDayName.length >= specificInDayName.length) {
 
-        //     // 临时存储筛选出的分类及销量
-        //     const tempItems = getDayClassify(specificName)
-        //     console.log(tempItems);
+            totalName = specificOutDayName.slice(0)
 
-        //     // 真正的销售数据量 -> 不带重复的
-        //     const realItems = []
-        //     // 合并相同分类的量
-        //     tempItems.uniqueClassify.forEach((item, index) => {
-        //       let tempNum = 0
-        //       tempItems.tempArr.forEach((value, i) => {
-        //         if (item === value.title) {
-        //           tempNum += value.num
-        //         }
-        //       })
-        //       realItems.push(tempNum)
-        //     })
-        //     console.log(realItems);
+            specificInDayName.forEach(item => {
+              // 标志量, 判断是否存在相同分类 
+              let flag = false
+              specificOutDayName.forEach(value => {
+                if (item == value) {
+                  flag = true
+                }
+              })
 
-        //     saleValueOption.dataset.source = [tempItems.uniqueClassify, realItems, realItems]
-        //     // 保存配置
-        //     showStore.setOption(saleValueOption);
+              if (!flag) {
+                totalName.push(item)
+                specifiOutDayTotal.push(0)
+              } else {
+                flag = false
+              }
+            })
 
-        //     // 具体出入库的日志记录
-        //     console.log(accentInStockItems[params.dataIndex]);
-        //     // 具体出入库商品
-        //     console.log(specificName);
+            // 格式化出库数据
+            // 临时出库数组
+            const tempInTotal = []
+            for (let i = 0; i < totalName.length; i++) {
+              let flag = false
+              specificInDayName.forEach((value, dataIndex) => {
+                if (totalName[i] === value) {
+                  tempInTotal.push(specifiInDayTotal[dataIndex])
+                  flag = true
+                }
+              })
+              !flag ? tempInTotal.push(0) : flag = true
+            }
+            // console.log(tempInTotal);
 
-        //   } else {
-        //     // 获取出库具体商品
-        //     getSpecifyItems(accentOutStockItems, params.dataIndex)
+            specifiInDayTotal = tempInTotal.slice(0)
+            
+          } else {
 
-        //     // 具体出入库的日志记录
-        //     console.log(accentOutStockItems[params.dataIndex]);
-        //     // 具体出入库商品
-        //     console.log(specificName);
-        //   }
+            totalName = specificInDayName.slice(0)
 
-        // }
+            specificOutDayName.forEach(item => {
+              let flag = false
+              specificInDayName.forEach(value => {
+                if (item == value) {
+                  flag = true
+                }
+              })
 
-        // message.warn('当前分类不可再细分，请返回上一层！')
+              if (!flag) {
+                totalName.push(item)
+                specifiInDayTotal.push(0)
+              } else {
+                flag = false
+              }
+            })
+
+            // 格式化出库数据
+            // 临时出库数组
+            const tempOutTotal = []
+            for (let i = 0; i < totalName.length; i++) {
+              let flag = false
+              specificOutDayName.forEach((value, dataIndex) => {
+                if (totalName[i] === value) {
+                  tempOutTotal.push(specifiOutDayTotal[dataIndex])
+                  flag = true
+                }
+              })
+              !flag ? tempOutTotal.push(0) : flag = true
+            }
+            // console.log(tempOutTotal);
+            specifiOutDayTotal = tempOutTotal.slice(0)
+          }
+
+          totalName.unshift('具体商品')
+          specifiInDayTotal.unshift('入库情况')
+          specifiOutDayTotal.unshift('出库情况')
+
+          // console.log("出库：" + specificOutDayName);
+          // console.log("入库：" + specificInDayName);
+          // console.log("出库：" + specifiOutDayTotal);
+          // console.log("入库：" + specifiInDayTotal);
+
+          // console.log(totalName);
+
+          // 销售额数据配置
+          const saleValueDayOption = getSaleValueOption(totalName, specifiInDayTotal, specifiOutDayTotal)
+          showValue.setOption(saleValueDayOption);
+
+          return
+        }
+
+        message.warn('当前分类不可再细分，请返回上一层！')
         // 如果在具体分类里面直接return
         return
 
@@ -251,13 +326,15 @@ export default defineComponent({
     onMounted(async () => {
       // 获取设置元素
       showValue = echarts.init(document.getElementById('showDayStoreValue'));
+      const { data: { data: { list } } } = await good.list()
+      totalItems = list
       goodClassify(goodClassifyTitle)
       await getSaleValue()
       showValueEchart()
     })
 
     onUnmounted(() => {
-      if(showValue) {
+      if (showValue) {
         showValue.dispose()
       }
     })

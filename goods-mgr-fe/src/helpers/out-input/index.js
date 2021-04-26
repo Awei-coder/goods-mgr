@@ -101,6 +101,9 @@ export const getSaleValueOption = (saleValueDate, inStock, outStock) => {
     toolbox: {
       show: true,
       feature: {
+        dataZoom: {
+          yAxisIndex: 'none'
+        },
         dataView: { readOnly: false },
         magicType: { type: ['line', 'bar'] },
         restore: {},
@@ -125,7 +128,7 @@ export const getSaleValueOption = (saleValueDate, inStock, outStock) => {
     ],
     series: [
       {
-        type: 'line',
+        type: 'bar',
         seriesLayoutBy: 'row',
         label: {
           show: true,
@@ -136,7 +139,7 @@ export const getSaleValueOption = (saleValueDate, inStock, outStock) => {
         }
       },
       {
-        type: 'line',
+        type: 'bar',
         seriesLayoutBy: 'row',
         label: {
           show: true,

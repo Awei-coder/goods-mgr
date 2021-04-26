@@ -122,11 +122,12 @@ export default defineComponent({
         })
 
         if (flag) {
-          // 具体商品数量
+          // 每日出库商品总销量价格
           const specificDayTotal = []
-          // 查询到的具体分类和ID
+          // 查询到的具体分类、ID和价格
           const specificDayName = []
           const specificDayID = []
+          const specificDayPrice = []
 
           // 获取具体数据
           specificName[params.dataIndex].forEach(item => {
@@ -134,24 +135,26 @@ export default defineComponent({
             if(!specificDayName.some(value => value===item.name)) {
               specificDayName.push(item.name)
               specificDayID.push(item._id)
+              specificDayPrice.push(item.price)
             }
           })
 
-          console.log(specificName[params.dataIndex]);
-          console.log(accentOutStockItems[params.dataIndex]);
+          // console.log(specificName[params.dataIndex]);
+          // console.log(accentOutStockItems[params.dataIndex]);
 
-          specificDayID.forEach(item => {
+          specificDayID.forEach((item, index) => {
             let num = 0
             accentOutStockItems[params.dataIndex].forEach(value => {
               if (value.goodName === item) {
                 num += value.num
               }
             })
-            specificDayTotal.push(num)
+            specificDayTotal.push((num * specificDayPrice[index]).toFixed(1))
           })
 
-          console.log(specificDayTotal);
-          console.log(specificDayName);
+          // console.log(specificDayTotal);
+          // console.log(specificDayName);
+          // console.log(specificDayPrice);
 
           // 具体销售商品数据配置
           const dayValueOption = getSaleDayValueOption(specificDayName, specificDayTotal)
